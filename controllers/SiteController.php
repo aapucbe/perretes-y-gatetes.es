@@ -7,6 +7,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
+use app\models\RegisterForm;
 use app\models\ContactForm;
 use app\models\Usuarios;
 
@@ -66,13 +67,6 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $usuario = new Usuarios;
-        $usuario->nombre = 'Aarón';
-        $usuario->apellidos = 'Puche Benedito';
-        $usuario->email = 'prueba@prueba.com';
-        $usuario->password = '1234';
-        $usuario->save();        
-
         return $this->render('index');
     }
 
@@ -95,6 +89,26 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
+    /**
+     * Register action
+     *
+     * @return string
+     */
+    public function actionRegister()
+    {
+
+        $model = new RegisterForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->registrar();
+            return $this->goBack();
+        }
+
+        return $this->render('register', [
+            'model' => $model,
+        ]);
+    }
+
 
     /**
      * Logout action.
