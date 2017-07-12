@@ -83,7 +83,7 @@ class RegisterForm extends Model
 
     /**
     * Registra un nuevo usuario en la BD
-    *
+    * Guardamos la contraseña cifrado con un salt
     */
     public function registrar(){
 
@@ -91,7 +91,7 @@ class RegisterForm extends Model
             $usuario->nombre = $this->nombre;
             $usuario->apellidos = $this->apellidos;
             $usuario->email = $this->email;
-            $usuario->password = $this->password;
+            $usuario->password = crypt($this->password, Yii::$app->params['salt']);
             $usuario->save();
     }
 
