@@ -68,6 +68,9 @@ class SiteController extends Controller
     {
         $usuario = new Usuarios;
         $usuario->nombre = 'Aarón';
+        $usuario->apellidos = 'Puche Benedito';
+        $usuario->email = 'prueba@prueba.com';
+        $usuario->password = '1234';
         $usuario->save();        
 
         return $this->render('index');
