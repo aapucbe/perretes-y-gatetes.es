@@ -136,3 +136,21 @@ a.desc:after {
     border-bottom: 2px solid #B22222;
     padding:0px;
 }
+.home{
+    margin-top: 3em;
+}
+
+.index-center{
+    text-align: center !important;
+}
+
+.form-index{
+    border: 3px solid;
+    border-color: #4073BF;
+    border-radius: 5px;
+}
+@media(max-width:1200px) {
+    .img-index{
+        display:none;
+    }
+}

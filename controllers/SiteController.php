@@ -67,7 +67,15 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $model = new RegisterForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->registrar();
+            return $this->goBack();
+        }
+
+        return $this->render('index', [
+            'model' => $model,
+        ]);
     }
 
     /**
