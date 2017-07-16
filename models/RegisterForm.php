@@ -95,4 +95,18 @@ class RegisterForm extends Model
             $usuario->save();
     }
 
+    /**
+     * Returns the attribute labels.
+     *
+     * See Model class for more details
+     *  
+     * @return array attribute labels (name => label).
+     */
+    public function attributeLabels()
+    {
+        return [
+            'repeat_password' => 'Repite la contraseña',
+        ];
+    }
+
 }

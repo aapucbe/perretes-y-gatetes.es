@@ -7,14 +7,14 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Perretes y Gatetes';
 ?>
 <div class="site-index">
-    <div class="container home">
+    <div class="container div-top">
         <div class="row">
-            <div class="col-lg-6 index-center img-index">
+            <div class="col-lg-6 div-center img-index">
                 <img src="../web/images/perro-y-gato.jpg" class="img-rounded"/>
             </div>
-            <div class="col-lg-6 index-center form-index">
-                <h2>¡Registrate!</h2>
-                <h4>Solo te llevará un minuto</h4>
+            <div class="col-lg-6 div-center border-box">
+                <h1>¡Regístrate!</h1>
+                <h3>Sólo te llevará un minuto</h3>
                 <br>
                 <div class="row">
                     <?php $form = ActiveForm::begin([

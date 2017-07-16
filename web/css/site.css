@@ -136,15 +136,15 @@ a.desc:after {
     border-bottom: 2px solid #B22222;
     padding:0px;
 }
-.home{
+.div-top{
     margin-top: 3em;
 }
 
-.index-center{
+.div-center{
     text-align: center !important;
 }
 
-.form-index{
+.border-box{
     border: 3px solid;
     border-color: #4073BF;
     border-radius: 5px;
