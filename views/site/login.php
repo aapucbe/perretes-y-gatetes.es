@@ -15,7 +15,7 @@ $this->title = 'Iniciar sesión';
 
     <div class="col-lg-6 border-box div-center div-top">
         <h1><?= Html::encode($this->title) ?></h1>
-
+        <h3><?= $_GET['token'] ?></h3>
         <p>Rellena los siguientes campos para iniciar sesión:</p>
 
         <?php $form = ActiveForm::begin([

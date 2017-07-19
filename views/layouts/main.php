@@ -38,13 +38,12 @@ $this->title = 'Perretes y Gatetes';
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            //['label' => 'Home', 'url' => ['/site/index']],
-            //['label' => 'About', 'url' => ['/site/about']],
-            //['label' => 'Contact', 'url' => ['/site/contact']],
-            
+
             ['label' => 'Iniciar sesión', 'url' => ['/site/login'],'visible' => Yii::$app->user->isGuest],
-            ['label' => 'Registrarse', 'url' => ['/site/login'],'visible' => Yii::$app->user->isGuest]
-            
+            ['label' => 'Registrarse', 'url' => ['/site/register'],'visible' => Yii::$app->user->isGuest],
+
+            // Se añade ['data-method' => 'post'] porque la acción logout() solo puede ser tratada mediante este método
+            ['label' => 'Salir ('.Yii::$app->user->identity->nombre.')', 'url' => ['/site/logout'],'visible' => !Yii::$app->user->isGuest,'linkOptions' => ['data-method' => 'post']]
 
             /*Yii::$app->user->isGuest ? (
                 ['label' => 'Iniciar sesión', 'url' => ['/site/login']]
@@ -64,19 +63,11 @@ $this->title = 'Perretes y Gatetes';
     ?>
 
     <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
         <?= $content ?>
     </div>
 </div>
 
 <footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
-    </div>
 </footer>
 
 <?php $this->endBody() ?>

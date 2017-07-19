@@ -19,7 +19,7 @@ class SiteController extends Controller
     /**
      * @inheritdoc
      */
-    //public $layout = 'layoutprueba';
+    //public $layout = 'layout_usuarios';
 
     public function behaviors()
     {
@@ -67,10 +67,15 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        # Si es un usuario registrado, redirigimos a su home personal
+        if (!Yii::$app->user->isGuest) {
+            $this->redirect(["usuarios/index"]);
+        }
+
         $model = new RegisterForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->registrar();
-            return $this->goBack();
+            $this->redirect(["site/login"]);
         }
 
         return $this->render('index', [
@@ -109,7 +114,7 @@ class SiteController extends Controller
         $model = new RegisterForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->registrar();
-            return $this->goBack();
+            $this->redirect(["site/login"]);
         }
 
         return $this->render('register', [
@@ -157,4 +162,5 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
 }

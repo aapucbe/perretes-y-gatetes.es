@@ -1,0 +1,1 @@
+<h1><?= Yii::$app->user->identity->nombre ?></h1>

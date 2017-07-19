@@ -93,6 +93,9 @@ class RegisterForm extends Model
             $usuario->email = $this->email;
             $usuario->password = crypt($this->password, Yii::$app->params['salt']);
             $usuario->save();
+
+            $dir = Yii::$app->params['urlBaseImg'].'/usuarios/usuario-'.$usuario->id;
+            mkdir($dir, 0777, true);
     }
 
     /**
@@ -107,6 +110,14 @@ class RegisterForm extends Model
         return [
             'repeat_password' => 'Repite la contraseña',
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
 }
