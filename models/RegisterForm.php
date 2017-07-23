@@ -20,6 +20,7 @@ class RegisterForm extends Model
     public $repeat_password;
 
     private $_user = false;
+    
 
     /**
      * @return array the validation rules.
@@ -84,16 +85,33 @@ class RegisterForm extends Model
     /**
     * Registra un nuevo usuario en la BD
     * Guardamos la contraseña cifrado con un salt
+    * Creamos las carpetas necesarias para guardar las imagenes del usuario
     */
     public function registrar(){
 
+            /**
+             * Guardado de los datos del usuario
+             */
             $usuario = new Usuarios();
             $usuario->nombre = $this->nombre;
             $usuario->apellidos = $this->apellidos;
             $usuario->email = $this->email;
             $usuario->password = crypt($this->password, Yii::$app->params['salt']);
+
+            /**
+             * Guardamos las imagenes de cabecera y perfil por defecto
+             */
+            $usuario->foto_perfil = "perfil-default.png";
+            $usuario->foto_cabecera = "jumbotron-default.png";
+
+            /**
+             * Guardamos los datos
+             */
             $usuario->save();
 
+            /**
+             * Creacion de las carpetas necesarias para las imagenes
+             */
             $dir = Yii::$app->params['urlBaseImg'].'/usuarios/usuario-'.$usuario->id;
             mkdir($dir, 0777, true);
     }
