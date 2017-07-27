@@ -6,6 +6,9 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use app\models\PerfilForm;
+use app\models\Usuarios;
+use yii\web\UploadedFile;
 
 class UsuariosController extends Controller
 {
@@ -61,6 +64,75 @@ class UsuariosController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
+    }
+
+    public function actionPerfil(){
+
+        $model = new PerfilForm;
+        $msg = null;
+
+        # Parametros recibidos por POST al actualizar el formulario
+        if($model->load(Yii::$app->request->post()))
+        {
+            if($model->validate()){
+                
+                $usuario = Usuarios::findOne($model->id);
+                # Comprobamos que exista ese usuario
+                if($usuario){
+
+                    $model->foto_perfil = UploadedFile::getInstance($model, 'foto_perfil');
+                    if($model->foto_perfil){
+                        $model->upload_perfil();
+                        $usuario->foto_perfil = 'foto_perfil.'.$model->foto_perfil->extension;
+                        $usuario->foto_perfil_mod = 1;                       
+                    }
+
+                    $model->foto_cabecera = UploadedFile::getInstance($model, 'foto_cabecera');
+                    if($model->foto_cabecera){
+                        $model->upload_cabecera();
+                        $usuario->foto_cabecera = 'foto_cabecera.'.$model->foto_cabecera->extension;
+                        $usuario->foto_cabecera_mod = 1;                        
+                    }
+
+                    $usuario->nombre = $model->nombre;
+                    $usuario->apellidos = $model->apellidos;
+                    $usuario->email = $model->email;
+                    $usuario->descripcion = $model->descripcion;
+                    if ($model->password_nueva) {
+                        $usuario->password = crypt($model->password_nueva, Yii::$app->params['salt']);
+                    }
+
+                    if ($usuario->update())
+                    {
+                        $msg = "Sus datos han sido actualizados correctamente";
+                    }else
+                    {
+                        $msg = "Sus datos han sido actualizados correctamente";
+                    }
+                }
+            }
+        }
+
+        # Parametro recibido por GET al pulsar sobre Perfil del menu sidebar
+        if (Yii::$app->request->get("id")){
+            # Desciframos el id
+            $id = base64_decode($_GET["id"]);
+
+            # Guardamos los datos para insertarlos en el formulario al modo de placeholders
+            $usuario = Usuarios::findOne($id);
+            # Comprobamos que exista ese id
+            if($usuario)
+            {
+                $model->id = $usuario->id;
+                $model->nombre = $usuario->nombre;
+                $model->apellidos = $usuario->apellidos;
+                $model->email = $usuario->email;
+                $model->descripcion = $usuario->descripcion;
+            }
+
+        }        
+
+        return $this->render('perfil',['model' => $model, 'msg' => $msg]);
     }
 
 }

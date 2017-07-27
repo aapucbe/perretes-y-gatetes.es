@@ -32,7 +32,7 @@ $this->title = 'Perretes y Gatetes';
         'brandLabel' => '<img src="../web/images/huella.png" class="img-responsive logo"/>',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar-inverse',
         ],
     ]);
     echo Nav::widget([
@@ -66,9 +66,6 @@ $this->title = 'Perretes y Gatetes';
         <?= $content ?>
     </div>
 </div>
-
-<footer class="footer">
-</footer>
 
 <?php $this->endBody() ?>
 </body>
