@@ -17,6 +17,7 @@ class PerfilForm extends Model
     public $nombre;
     public $apellidos;
     public $email;
+    public $fecha_nacimiento;
     public $descripcion;
     public $foto_perfil;
     public $foto_cabecera;
@@ -31,8 +32,10 @@ class PerfilForm extends Model
         return [
             // email must be email
             ['email','email'],
-            // id, nombre, apellidos y descripcion no necesitan verificacion
-            [['id','nombre','apellidos','descripcion','password_nueva'],'default'],
+            // Estos campos no necesitan verificacion
+            [['id','nombre','apellidos','descripcion','password_nueva','fecha_nacimiento'],'default'],
+            // Validar fecha_nacimiento como dd/mm/yyyy
+             ['fecha_nacimiento', 'match', 'pattern' => "/^(\d{1,2})-(\d{1,2})-(\d{4})$/", 'message' => 'Formato dd-mm-aaaa'],
             // la contraseña actual debe ser obligatoria
             ['password_actual','required'],
             ['password_actual', 'validatePassword'],
@@ -67,6 +70,20 @@ class PerfilForm extends Model
         if(!(crypt($this->password_actual, Yii::$app->params['salt']) === Yii::$app->user->identity->password)){
             $this->addError($attribute, 'La contraseña introducida no es tu contraseña actual');
         }
+    }
+
+    /**
+     * Returns the attribute labels.
+     *
+     * See Model class for more details
+     *  
+     * @return array attribute labels (name => label).
+     */
+    public function attributeLabels()
+    {
+        return [
+            'fecha_nacimiento' => 'Fecha de nacimiento (dd/mm/aaaa)',
+        ];
     }
 
 }

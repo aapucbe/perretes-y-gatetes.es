@@ -8,6 +8,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\PerfilForm;
 use app\models\Usuarios;
+use app\models\Mascotas;
+use app\models\CrearmascotaForm;
 use yii\web\UploadedFile;
 
 class UsuariosController extends Controller
@@ -97,7 +99,8 @@ class UsuariosController extends Controller
                     $usuario->nombre = $model->nombre;
                     $usuario->apellidos = $model->apellidos;
                     $usuario->email = $model->email;
-                    $usuario->descripcion = $model->descripcion;
+                    $usuario->fecha_nacimiento = $model->fecha_nacimiento;
+                    $usuario->descripcion = $model->descripcion;                    
                     if ($model->password_nueva) {
                         $usuario->password = crypt($model->password_nueva, Yii::$app->params['salt']);
                     }
@@ -127,7 +130,8 @@ class UsuariosController extends Controller
                 $model->nombre = $usuario->nombre;
                 $model->apellidos = $usuario->apellidos;
                 $model->email = $usuario->email;
-                $model->descripcion = $usuario->descripcion;
+                $model->fecha_nacimiento = $usuario->fecha_nacimiento;
+                $model->descripcion = $usuario->descripcion;                
             }
 
         }        
@@ -135,4 +139,50 @@ class UsuariosController extends Controller
         return $this->render('perfil',['model' => $model, 'msg' => $msg]);
     }
 
+    public function actionCrearmascota(){
+        $model = new CrearmascotaForm();
+        $msg = '';
+
+        # Parametro recibido por GET al pulsar sobre Perfil del menu sidebar
+        if (Yii::$app->request->get("id")){
+            # Desciframos el id
+            $id = base64_decode($_GET["id"]);
+            $usuario = Usuarios::findOne($id);
+
+            # Comprobamos que exista ese id
+            if($usuario){
+                $model->id_usuario = $usuario->id;
+                $model->email_usuario = $usuario->email;
+            }
+        }
+
+        # Parametros recibidos por POST al actualizar el formulario
+        if($model->load(Yii::$app->request->post())){
+            $mascota = new Mascotas();
+
+            if($model->validate()){
+
+                $mascota->nombre = $model->nombre;
+                $mascota->animal = $model->animal;
+                $mascota->raza = $model->raza;
+                $mascota->fecha_nacimiento = $model->fecha_nacimiento;
+                $mascota->hogar = $model->hogar;
+                $mascota->foto_perfil = "perfil-default.png";
+                $mascota->foto_cabecera = "jumbotron-default.png";
+                $mascota->id_usuario = $model->id_usuario;
+                $mascota->email_usuario = $model->email_usuario;
+                $mascota->save();
+
+                $msg = "La mascota ha sido insertada con exito";
+
+            }
+
+        }
+
+        return $this->render('crearmascota',['model' => $model, 'msg' => $msg]);
+    }
+
+    public function actionVermascotas(){
+        
+    }
 }

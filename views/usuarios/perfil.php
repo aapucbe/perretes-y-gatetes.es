@@ -23,7 +23,9 @@ $this->title = 'Mi perfil';
 
     <?= $form->field($model, 'apellidos')->textInput() ?>
 
-    <?= $form->field($model, 'email')->textInput() ?>    
+    <?= $form->field($model, 'email')->textInput() ?>
+
+    <?= $form->field($model, 'fecha_nacimiento')->textInput() ?>   
 
     <?= $form->field($model, 'password_nueva')->passwordInput() ?>
 

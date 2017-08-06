@@ -8,10 +8,12 @@ body {
     height: auto;
     margin: 0 auto -60px;
     padding: 0 0 60px;
+    background-color: #E9EBEE;
 }
 
 .wrap > .container {
-    padding: 70px 15px 20px;
+    padding: 20px 0px 20px;
+    background-color: #fff;
 }
 
 .footer {
@@ -164,13 +166,16 @@ a.desc:after {
 .list-group.sidebar{
     margin-top:1em;
 }
-.list-group.sidebar li{
+.list-group.sidebar a{
     background-color:#4073BF;
 }
-.list-group.sidebar li:hover{
+.list-group.sidebar a:hover{
     background-color:#335C96;
 }
 .list-group.sidebar a{
     text-decoration: none;
     color:#fff;
+}
+#crearmascotaform-animal{
+    text-align: left;
 }
