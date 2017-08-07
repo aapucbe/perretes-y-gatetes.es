@@ -45,7 +45,7 @@ class CrearmascotaForm extends Model
     public function attributeLabels()
     {
         return [
-            'fecha_nacimiento' => 'Fecha de nacimiento (dd/mm/aaaa)',
+            'fecha_nacimiento' => 'Fecha de nacimiento (dd-mm-aaaa)',
             'hogar' => '¿Donde vives?'
         ];
     }

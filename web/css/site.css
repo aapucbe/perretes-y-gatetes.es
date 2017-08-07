@@ -151,6 +151,11 @@ a.desc:after {
     border-color: #4073BF;
     border-radius: 5px;
 }
+.border-box-mascota{
+    border: 3px solid;
+    border-color: #B22222;
+    border-radius: 5px;    
+}
 @media(max-width:1200px) {
     .img-index{
         display:none;
@@ -178,4 +183,35 @@ a.desc:after {
 }
 #crearmascotaform-animal{
     text-align: left;
+}
+
+.div-mascota{
+    text-align: center;
+    margin: 5px;
+}
+.div-acceder{
+    padding-right: 0px;
+}
+.div-eliminar{
+    padding-left: 0px;
+}
+.img-responsive{
+    display: inline-block;
+}
+.fila-mascotas{
+    margin-bottom: 1em; 
+    margin-left: 1em;
+}
+@media(max-width:1200px) {
+    .fila-mascotas{
+        margin: 0;
+    }
+}
+@media(max-width:990px) {
+    .div-acceder{
+    padding-right: 15px;
+    }
+    .div-eliminar{
+        padding-left: 15px;
+    }
 }

@@ -2,7 +2,6 @@
 	
 	use yii\helpers\Html;
 ?>
-
 	<div class="container">
 		<div class="jumbotron">
 			<?php
@@ -32,8 +31,8 @@
 				?>				
 				<div class="list-group sidebar">
 				  <?= Html::a('Mi Perfil', ['usuarios/perfil','id' => base64_encode(Yii::$app->user->identity->id)],['class' => 'list-group-item']) ?>
-				  <?= Html::a('Mis Mascotas', ['usuarios/index'],['class' => 'list-group-item']) ?>
-				  <?= Html::a('Añadir Mascota', ['usuarios/index'],['class' => 'list-group-item']) ?>
+				  <?= Html::a('Mis Mascotas', ['usuarios/vermascotas'],['class' => 'list-group-item']) ?>
+				  <?= Html::a('Añadir Mascota', ['usuarios/crearmascota','id' => base64_encode(Yii::$app->user->identity->id)],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Salir', ['site/logout'],['class' => 'list-group-item','data-method' => 'post']) ?>
 				</div>
 			</div>

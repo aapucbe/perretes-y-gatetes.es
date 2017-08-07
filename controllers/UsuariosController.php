@@ -65,7 +65,7 @@ class UsuariosController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $this->redirect(['usuarios/vermascotas']);
     }
 
     public function actionPerfil(){
@@ -140,49 +140,82 @@ class UsuariosController extends Controller
     }
 
     public function actionCrearmascota(){
-        $model = new CrearmascotaForm();
-        $msg = '';
 
-        # Parametro recibido por GET al pulsar sobre Perfil del menu sidebar
-        if (Yii::$app->request->get("id")){
-            # Desciframos el id
-            $id = base64_decode($_GET["id"]);
-            $usuario = Usuarios::findOne($id);
+        # Antes de pasar a crear la nueva mascota comprobamos que tiene menos de 6 mascotas
+        $model = Mascotas::find()
+                ->where(["like", "id_usuario", Yii::$app->user->identity->id])
+                ->all();
 
-            # Comprobamos que exista ese id
-            if($usuario){
-                $model->id_usuario = $usuario->id;
-                $model->email_usuario = $usuario->email;
-            }
-        }
+        $count = count($model);
 
-        # Parametros recibidos por POST al actualizar el formulario
-        if($model->load(Yii::$app->request->post())){
-            $mascota = new Mascotas();
+        if ($count<6) {
+            $model = new CrearmascotaForm();
+            $msg = '';
 
-            if($model->validate()){
+            # Parametro recibido por GET al pulsar sobre Perfil del menu sidebar
+            if (Yii::$app->request->get("id")){
+                # Desciframos el id
+                $id = base64_decode($_GET["id"]);
+                $usuario = Usuarios::findOne($id);
 
-                $mascota->nombre = $model->nombre;
-                $mascota->animal = $model->animal;
-                $mascota->raza = $model->raza;
-                $mascota->fecha_nacimiento = $model->fecha_nacimiento;
-                $mascota->hogar = $model->hogar;
-                $mascota->foto_perfil = "perfil-default.png";
-                $mascota->foto_cabecera = "jumbotron-default.png";
-                $mascota->id_usuario = $model->id_usuario;
-                $mascota->email_usuario = $model->email_usuario;
-                $mascota->save();
-
-                $msg = "La mascota ha sido insertada con exito";
-
+                # Comprobamos que exista ese id
+                if($usuario){
+                    $model->id_usuario = $usuario->id;
+                    $model->email_usuario = $usuario->email;
+                }
             }
 
+            # Parametros recibidos por POST al actualizar el formulario
+            if($model->load(Yii::$app->request->post())){
+                $mascota = new Mascotas();
+
+                if($model->validate()){
+
+                    $mascota->nombre = $model->nombre;
+                    $mascota->animal = $model->animal;
+                    $mascota->raza = $model->raza;
+                    $mascota->fecha_nacimiento = $model->fecha_nacimiento;
+                    $mascota->hogar = $model->hogar;
+                    $mascota->foto_perfil = "perfil-default.png";
+                    $mascota->foto_cabecera = "jumbotron-default.png";
+                    $mascota->id_usuario = $model->id_usuario;
+                    $mascota->email_usuario = $model->email_usuario;
+                    $mascota->save();
+
+                    $msg = "La mascota ha sido insertada con exito";
+
+                }
+
+            }
+
+            return $this->render('crearmascota',['model' => $model, 'msg' => $msg]);
+        }else{
+            return $this->render('muchasmascotas');
         }
 
-        return $this->render('crearmascota',['model' => $model, 'msg' => $msg]);
+            
     }
 
     public function actionVermascotas(){
+
+        $model = Mascotas::find()
+                ->where(["like", "id_usuario", Yii::$app->user->identity->id])
+                ->all();
+
+        $count = count($model);
+
+    return $this->render("vermascotas", ["model" => $model, "count" => $count]);
         
+    }
+
+    public function actionEliminarmascota(){
+        if (Yii::$app->request->post()) {
+
+            $id = $_POST['id_mascota'];
+            $mascota = Mascotas::findOne($id);
+            $msg = "Mascota ".$mascota->nombre." eliminada correctamente, redireccionando...";
+            $mascota->delete();            
+            $this->redirect(["usuarios/vermascotas"]);
+        }
     }
 }
