@@ -11,6 +11,7 @@ use app\models\Usuarios;
 use app\models\Mascotas;
 use app\models\CrearmascotaForm;
 use yii\web\UploadedFile;
+use yii\web\Session;
 
 class UsuariosController extends Controller
 {
@@ -217,5 +218,17 @@ class UsuariosController extends Controller
             $mascota->delete();            
             $this->redirect(["usuarios/vermascotas"]);
         }
+    }
+
+    public function actionAccedermascota(){
+
+        if (Yii::$app->request->get()){
+            $session = Yii::$app->session;
+            $session->open();
+            $session['rol'] = 'mascota';
+            $session['id_mascota'] = $_GET['id_mascota'];
+        }
+
+        $this->redirect(['mascotas/index']);
     }
 }

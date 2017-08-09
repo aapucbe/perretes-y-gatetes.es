@@ -39,7 +39,7 @@ $this->title = 'Mis mascotas';
                     }
                 ?>
                 <div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
-                    <div class="col-lg-6 col-md-6 div-acceder"><?= Html::a('Acceder', ['usuarios/index'],['class' => 'btn btn-default']) ?></div>
+                    <div class="col-lg-6 col-md-6 div-acceder"><?= Html::a('Acceder', ['usuarios/accedermascota','id_mascota' => $row->id],['class' => 'btn btn-default']) ?></div>
                     <div class="col-lg-6 col-md-6 div-eliminar">
                         <!-- Utilizamos un modal para que diga si esta seguro de eliminar la mascota -->               
                         <a class="btn btn-default" href="#" data-toggle="modal" data-target="#id_mascota_<?= $row->id ?>">Eliminar</a>
@@ -86,7 +86,7 @@ $this->title = 'Mis mascotas';
                     }
                 ?>                
                 <div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
-                    <div class="col-lg-6 col-md-6 div-acceder"><?= Html::a('Acceder', ['usuarios/index'],['class' => 'btn btn-default']) ?></div>
+                    <div class="col-lg-6 col-md-6 div-acceder"><?= Html::a('Acceder', ['usuarios/accedermascota','id_mascota' => $row->id],['class' => 'btn btn-default']) ?></div>
                     <div class="col-lg-6 col-md-6 div-eliminar">
                         <!-- Utilizamos un modal para que diga si esta seguro de eliminar la mascota -->               
                         <a class="btn btn-default" href="#" data-toggle="modal" data-target="#id_mascota_<?= $row->id ?>">Eliminar</a>
@@ -132,7 +132,7 @@ $this->title = 'Mis mascotas';
                     }
                 ?>                
                 <div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
-                    <div class="col-lg-6 col-md-6 div-acceder"><?= Html::a('Acceder', ['usuarios/index'],['class' => 'btn btn-default']) ?></div>
+                    <div class="col-lg-6 col-md-6 div-acceder"><?= Html::a('Acceder', ['usuarios/accedermascota','id_mascota' => $row->id],['class' => 'btn btn-default']) ?></div>
                     <div class="col-lg-6 col-md-6 div-eliminar">
                         <!-- Utilizamos un modal para que diga si esta seguro de eliminar la mascota -->               
                         <a class="btn btn-default" href="#" data-toggle="modal" data-target="#id_mascota_<?= $row->id ?>">Eliminar</a>

@@ -33,7 +33,7 @@ $this->title = 'Crear Mascota';
 
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::submitButton('Actualizar', ['class' => 'btn btn-primary', 'name' => 'crearmascota-button']) ?>
+            <?= Html::submitButton('Añadir mascota', ['class' => 'btn btn-primary', 'name' => 'crearmascota-button']) ?>
         </div>
     </div>
 
