@@ -8,6 +8,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use yii\web\Session;
 
 AppAsset::register($this);
 
@@ -28,6 +29,8 @@ $this->title = 'Perretes y Gatetes';
 
 <div class="wrap">
     <?php
+    $session = Yii::$app->session;
+    $session->open();
     NavBar::begin([
         'brandLabel' => '<img src="../web/images/huella.png" class="img-responsive logo"/>',
         'brandUrl' => Yii::$app->homeUrl,
@@ -41,22 +44,22 @@ $this->title = 'Perretes y Gatetes';
 
             ['label' => 'Iniciar sesión', 'url' => ['/site/login'],'visible' => Yii::$app->user->isGuest],
             ['label' => 'Registrarse', 'url' => ['/site/register'],'visible' => Yii::$app->user->isGuest],
+            ['label' => 'Inicio', 'url' => ['usuarios/index'],'visible' => !Yii::$app->user->isGuest && $session['rol'] != 'mascota'],
+            ['label' => 'Mi Perfil', 'url' => ['usuarios/perfil','id' => base64_encode(Yii::$app->user->identity->id)],'visible' => !Yii::$app->user->isGuest && $session['rol'] != 'mascota','options' => ['class' => 'visible-xs-inline']],
+            ['label' => 'Mis Mascotas', 'url' => ['usuarios/vermascotas'],'visible' => !Yii::$app->user->isGuest && $session['rol'] != 'mascota','options' => ['class' => 'visible-xs-inline']],
+            ['label' => 'Añadir Mascota', 'url' => ['usuarios/crearmascota','id' => base64_encode(Yii::$app->user->identity->id)],'visible' => !Yii::$app->user->isGuest && $session['rol'] != 'mascota','options' => ['class' => 'visible-xs-inline']],
+            ['label' => 'Inicio', 'url' => ['mascotas/index'],'visible' => $session['rol'] == 'mascota'],
+            ['label' => 'Mi Muro', 'url' => ['mascotas/index'],'visible' => $session['rol'] == 'mascota','options' => ['class' => 'visible-xs-inline']],
+            ['label' => 'Mi Perfil', 'url' => ['mascotas/index'],'visible' => $session['rol'] == 'mascota','options' => ['class' => 'visible-xs-inline']],
+            ['label' => 'Mis Amigos', 'url' => ['mascotas/index'],'visible' => $session['rol'] == 'mascota','options' => ['class' => 'visible-xs-inline']],
+            ['label' => 'Mis Mensajes', 'url' => ['mascotas/index'],'visible' => $session['rol'] == 'mascota','options' => ['class' => 'visible-xs-inline']],
+            ['label' => 'Mis Imagenes', 'url' => ['mascotas/index'],'visible' => $session['rol'] == 'mascota','options' => ['class' => 'visible-xs-inline']],
+            ['label' => 'Buscar Mascotas', 'url' => ['mascotas/index'],'visible' => $session['rol'] == 'mascota'],
+            ['label' => 'Cambiar Mascota', 'url' => ['mascotas/index'],'visible' => $session['rol'] == 'mascota'],
 
             // Se añade ['data-method' => 'post'] porque la acción logout() solo puede ser tratada mediante este método
-            ['label' => 'Salir ('.Yii::$app->user->identity->nombre.')', 'url' => ['/site/logout'],'visible' => !Yii::$app->user->isGuest,'linkOptions' => ['data-method' => 'post']]
+            ['label' => 'Salir ('.Yii::$app->user->identity->nombre.')', 'url' => ['/site/logout'],'visible' => !Yii::$app->user->isGuest && $session['rol'] != 'mascota','linkOptions' => ['data-method' => 'post']]
 
-            /*Yii::$app->user->isGuest ? (
-                ['label' => 'Iniciar sesión', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )*/
         ],
     ]);
     NavBar::end();

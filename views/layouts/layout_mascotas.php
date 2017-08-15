@@ -31,11 +31,14 @@
 				<?php
 					}
 				?>				
-				<div class="list-group sidebar  hidden-xs">
-				  <?= Html::a('Mi Perfil', ['usuarios/perfil','id' => base64_encode(Yii::$app->user->identity->id)],['class' => 'list-group-item']) ?>
-				  <?= Html::a('Mis Mascotas', ['usuarios/vermascotas'],['class' => 'list-group-item']) ?>
-				  <?= Html::a('Añadir Mascota', ['usuarios/crearmascota','id' => base64_encode(Yii::$app->user->identity->id)],['class' => 'list-group-item']) ?>
-				  <?= Html::a('Salir', ['site/logout'],['class' => 'list-group-item','data-method' => 'post']) ?>
+				<div class="list-group sidebar hidden-xs">
+				  <?= Html::a('Mi Muro', ['mascotas/index'],['class' => 'list-group-item']) ?>
+				  <?= Html::a('Mi Perfil', ['mascotas/index'],['class' => 'list-group-item']) ?>
+				  <?= Html::a('Mis Amigos', ['mascotas/index'],['class' => 'list-group-item']) ?>
+				  <?= Html::a('Mis Mensajes', ['mascotas/index'],['class' => 'list-group-item']) ?>
+				  <?= Html::a('Mis Imagenes', ['mascotas/index'],['class' => 'list-group-item']) ?>
+				  <?= Html::a('Buscar Mascotas', ['mascotas/index'],['class' => 'list-group-item']) ?>
+				  <?= Html::a('Cambiar Mascota', ['mascotas/index'],['class' => 'list-group-item']) ?>
 				</div>
 			</div>
 			<div class="col-lg-9"><?= $content ?></div>

@@ -215,3 +215,9 @@ a.desc:after {
         padding-left: 15px;
     }
 }
+@media(max-width:768px) {
+    .img-perfil{
+        margin-bottom: 1em;
+        text-align: center;
+    }
+}

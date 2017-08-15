@@ -66,6 +66,19 @@ class UsuariosController extends Controller
      */
     public function actionIndex()
     {
+
+        # SI EXISTEN LOS CAMPOS rol E id_mascota LOS REINICIAMOS
+        $session = Yii::$app->session;
+        $session->open();
+        if ($session['rol']) {
+            $session['rol'] = '';
+        }
+        if ($session['id_mascota']) {
+            $session['id_mascota'] = '';
+        }
+        $session->close();
+
+        # REDIRIGIMOS A LA VISTA DE LAS AMSCOTAS DEL USUARIO
         $this->redirect(['usuarios/vermascotas']);
     }
 
@@ -227,6 +240,7 @@ class UsuariosController extends Controller
             $session->open();
             $session['rol'] = 'mascota';
             $session['id_mascota'] = $_GET['id_mascota'];
+            $session->close();
         }
 
         $this->redirect(['mascotas/index']);
