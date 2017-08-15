@@ -67,22 +67,17 @@ class UsuariosController extends Controller
     public function actionIndex()
     {
 
-        # SI EXISTEN LOS CAMPOS rol E id_mascota LOS REINICIAMOS
-        $session = Yii::$app->session;
-        $session->open();
-        if ($session['rol']) {
-            $session['rol'] = '';
-        }
-        if ($session['id_mascota']) {
-            $session['id_mascota'] = '';
-        }
-        $session->close();
+        # Reseteamos la sesiones de la amscota
+        $this->sesionReset();
 
         # REDIRIGIMOS A LA VISTA DE LAS AMSCOTAS DEL USUARIO
         $this->redirect(['usuarios/vermascotas']);
     }
 
     public function actionPerfil(){
+
+        # Reseteamos la sesiones de la amscota
+        $this->sesionReset();
 
         $model = new PerfilForm;
         $msg = null;
@@ -155,6 +150,9 @@ class UsuariosController extends Controller
 
     public function actionCrearmascota(){
 
+        # Reseteamos la sesiones de la amscota
+        $this->sesionReset();
+
         # Antes de pasar a crear la nueva mascota comprobamos que tiene menos de 6 mascotas
         $model = Mascotas::find()
                 ->where(["like", "id_usuario", Yii::$app->user->identity->id])
@@ -188,6 +186,7 @@ class UsuariosController extends Controller
                     $mascota->nombre = $model->nombre;
                     $mascota->animal = $model->animal;
                     $mascota->raza = $model->raza;
+                    $mascota->sexo = $model->sexo;
                     $mascota->fecha_nacimiento = $model->fecha_nacimiento;
                     $mascota->hogar = $model->hogar;
                     $mascota->foto_perfil = "perfil-default.png";
@@ -195,6 +194,12 @@ class UsuariosController extends Controller
                     $mascota->id_usuario = $model->id_usuario;
                     $mascota->email_usuario = $model->email_usuario;
                     $mascota->save();
+
+                    /**
+                     * Creacion de las carpetas necesarias para las imagenes
+                     */
+                    $dir = Yii::$app->params['urlBaseImg'].'/mascotas/mascota-'.$mascota->id;
+                    mkdir($dir, 0777, true);
 
                     $msg = "La mascota ha sido insertada con exito";
 
@@ -212,6 +217,9 @@ class UsuariosController extends Controller
 
     public function actionVermascotas(){
 
+        # Reseteamos la sesiones de la amscota
+        $this->sesionReset();
+
         $model = Mascotas::find()
                 ->where(["like", "id_usuario", Yii::$app->user->identity->id])
                 ->all();
@@ -223,6 +231,10 @@ class UsuariosController extends Controller
     }
 
     public function actionEliminarmascota(){
+
+        # Reseteamos la sesiones de la amscota
+        $this->sesionReset();
+
         if (Yii::$app->request->post()) {
 
             $id = $_POST['id_mascota'];
@@ -235,6 +247,9 @@ class UsuariosController extends Controller
 
     public function actionAccedermascota(){
 
+        # Reseteamos la sesiones de la amscota
+        $this->sesionReset();
+
         if (Yii::$app->request->get()){
             $session = Yii::$app->session;
             $session->open();
@@ -244,5 +259,18 @@ class UsuariosController extends Controller
         }
 
         $this->redirect(['mascotas/index']);
+    }
+
+    public function sesionReset(){
+        # SI EXISTEN LOS CAMPOS rol E id_mascota LOS REINICIAMOS
+        $session = Yii::$app->session;
+        $session->open();
+        if ($session['rol']) {
+            $session['rol'] = '';
+        }
+        if ($session['id_mascota']) {
+            $session['id_mascota'] = '';
+        }
+        $session->close();
     }
 }

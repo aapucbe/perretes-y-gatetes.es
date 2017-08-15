@@ -184,6 +184,9 @@ a.desc:after {
 #crearmascotaform-animal{
     text-align: left;
 }
+#crearmascotaform-sexo{
+    text-align: left;
+}
 
 .div-mascota{
     text-align: center;
@@ -218,6 +221,12 @@ a.desc:after {
 @media(max-width:768px) {
     .img-perfil{
         margin-bottom: 1em;
+        text-align: center;
+    }
+    #crearmascotaform-animal{
+        text-align: center;
+    }
+    #crearmascotaform-sexo{
         text-align: center;
     }
 }

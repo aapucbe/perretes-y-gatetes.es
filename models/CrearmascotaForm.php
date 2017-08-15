@@ -16,6 +16,7 @@ class CrearmascotaForm extends Model
     public $nombre;
     public $animal;
     public $raza;
+    public $sexo;
     public $fecha_nacimiento;
     public $hogar;
     public $id_usuario;
@@ -28,7 +29,7 @@ class CrearmascotaForm extends Model
     public function rules()
     {
         return [
-        	[['nombre','animal','raza'],'required'],
+        	[['nombre','animal','raza','sexo'],'required'],
         	[['hogar','id_usuario','email_usuario','fecha_nacimiento'],'default'],
         	// Validar fecha_nacimiento como dd/mm/yyyy
             ['fecha_nacimiento', 'match', 'pattern' => "/^(\d{1,2})-(\d{1,2})-(\d{4})$/", 'message' => 'Formato dd-mm-aaaa'],

@@ -25,6 +25,8 @@ $this->title = 'Crear Mascota';
 
     <?= $form->field($model, 'raza')->textInput() ?>
 
+    <?= $form->field($model, 'sexo')->radioList(['macho' => 'macho','hembra' => 'hembra']) ?>
+
     <?= $form->field($model, 'fecha_nacimiento')->textInput() ?>
 
     <?= $form->field($model, 'hogar')->textInput() ?>
