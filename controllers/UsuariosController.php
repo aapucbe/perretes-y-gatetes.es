@@ -240,7 +240,12 @@ class UsuariosController extends Controller
             $id = $_POST['id_mascota'];
             $mascota = Mascotas::findOne($id);
             $msg = "Mascota ".$mascota->nombre." eliminada correctamente, redireccionando...";
-            $mascota->delete();            
+            # Eliminamos la mascota de la base de datos
+            $mascota->delete();
+            # Eliminamos la carpeta de la mascota
+            $carpeta = ''.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$id.'';
+            $this->eliminarCarpeta($carpeta);
+            # Redirigimos a la pagina de vermascotas
             $this->redirect(["usuarios/vermascotas"]);
         }
     }
@@ -272,5 +277,24 @@ class UsuariosController extends Controller
             $session['id_mascota'] = '';
         }
         $session->close();
+    }
+
+    public function eliminarCarpeta($carpeta){
+
+        foreach(glob($carpeta . "/*") as $archivos_carpeta)
+        {
+            //echo $archivos_carpeta;
+     
+            if (is_dir($archivos_carpeta))
+            {
+                $this->eliminarCarpeta($archivos_carpeta);
+            }
+            else
+            {
+                unlink($archivos_carpeta);
+            }
+        }
+     
+        rmdir($carpeta);
     }
 }
