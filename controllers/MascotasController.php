@@ -9,10 +9,13 @@ use yii\filters\VerbFilter;
 use app\models\PerfilForm;
 use app\models\Usuarios;
 use app\models\Mascotas;
+use app\models\Imagenes;
 use app\models\CrearmascotaForm;
 use app\models\PerfilmascotaForm;
+use app\models\SubirimagenForm;
 use yii\web\UploadedFile;
 use yii\web\Session;
+use yii\data\Pagination;
 
 class MascotasController extends Controller
 {
@@ -145,6 +148,7 @@ class MascotasController extends Controller
         return $this->render('perfil',['model' => $model, 'msg' => $msg]);
     }
 
+    # Obtenemos el id de la mascota actual
     public function getId(){
         $session = Yii::$app->session;
         $session->open();
@@ -152,4 +156,71 @@ class MascotasController extends Controller
         $session->close();
         return $id_mascota;
     }
+
+    public function actionImagenes(){
+
+        $model = new SubirimagenForm();
+        $msg = '';
+
+        $query = Imagenes::find()->where(['id_mascota' => $this->getId()]);
+        $countQuery = clone $query;
+        $pages = new Pagination([
+            'pageSize' => 9,
+            'totalCount' => $countQuery->count(),            
+        ]);
+        $imagenes = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        # Al acceder por GET inicializaremos las variables id_mascota e id_album
+        if (Yii::$app->request->get()){
+            $model->id_mascota = $this->getId();
+            $model->id_album = 0;
+
+        }
+
+        # Parametros recibidos por POST mediante el formulario
+        if ($model->load(Yii::$app->request->post())) {
+
+            if ($model->validate()) {
+                $imagen = new Imagenes();
+
+                if ($model->imagen = UploadedFile::getInstance($model, 'imagen')) {
+                    $imagen->id_mascota = $model->id_mascota;
+                    $imagen->id_album = $model->id_album;
+
+                    $imagen->save();
+
+                    $model->upload_imagen($imagen->id);
+                    $imagen->nombre = ''.$imagen->id.'-'.$model->imagen->name;
+
+                    $imagen->save();
+
+                    $msg = 'Su imágen se ha subido con exito';
+                }else{
+                    $msg = 'Seleccione una imagen para subir';
+                }
+
+                
+            }          
+
+        }
+
+        return $this->render('imagenes',['model' => $model,'msg' => $msg, 'imagenes' => $imagenes, 'pages' => $pages]);
+    }
+
+    public function actionEliminarimagen(){
+        if (Yii::$app->request->post()){
+            $id_imagen = $_POST['id_imagen'];
+            $imagen = Imagenes::findOne($id_imagen);
+            # Eliminamos el archivo
+            unlink(Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$imagen->id_mascota.'/imagenes/'.$imagen->nombre);
+            # Eliminamos de la base de datos
+            $imagen->delete();
+            # Redirigimos a la vista anterior
+            $this->redirect(["mascotas/imagenes"]);
+
+        }
+    }
+
 }

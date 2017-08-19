@@ -200,8 +200,19 @@ class UsuariosController extends Controller
                      */
                     $dir = Yii::$app->params['urlBaseImg'].'/mascotas/mascota-'.$mascota->id;
                     mkdir($dir, 0777, true);
-
+                    $dirImagenes = $dir.'/imagenes';
+                    mkdir($dirImagenes, 0777, true);
+                    $dirAlbumes = $dir.'/albumes';
+                    mkdir($dirAlbumes, 0777, true);
                     $msg = "La mascota ha sido insertada con exito";
+
+                    # Reiniciamos el modelo de formulario
+                    $model->nombre = '';
+                    $model->animal = '';
+                    $model->raza = '';
+                    $model->sexo = '';
+                    $model->fecha_nacimiento = '';
+                    $model->hogar = '';
 
                 }
 
