@@ -20,6 +20,8 @@ $this->title = 'Perretes y Gatetes';
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Estilos CSS para lightbox Lokesh Dhakar-->
+    <link href="../web/lib/lightbox/src/css/lightbox.css" rel="stylesheet">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -71,6 +73,10 @@ $this->title = 'Perretes y Gatetes';
 </div>
 
 <?php $this->endBody() ?>
+<!-- JQuery -->
+<!--<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>-->
+<!-- JS par lightbox Lokesh Dhakar -->
+<script src="../web/lib/lightbox/src/js/lightbox.js"></script>
 </body>
 </html>
 <?php $this->endPage() ?>
