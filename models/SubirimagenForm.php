@@ -35,7 +35,7 @@ class SubirimagenForm extends Model
     {
 
         if ($this->validate()) {
-            if($id_album == 0){
+            if($this->id_album == 0){
                 $this->imagen->saveAs(Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$this->id_mascota.'/imagenes/'.$id.'-'.$this->imagen->name);
                 return true;
             }else {

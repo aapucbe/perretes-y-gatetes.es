@@ -13,12 +13,6 @@ use yii\helpers\Url;
 $this->title = 'Mis imagenes';
 ?>
 
-<div class="div-center">
-	<ul class="nav nav-tabs">
-	  <li class="active"><?= Html::a('Imágenes', ['mascotas/imagenes']) ?></li>
-	  <li><?= Html::a('Álbumes', ['mascotas/albumes']) ?></li>
-	</ul>
-</div>
 <div class="border-box div-center" style="padding: 15px">
 	<div class="row">
 		<h3><?= $msg ?></h3>
@@ -51,7 +45,7 @@ $this->title = 'Mis imagenes';
 	<div class="row">
 		<div class="col-lg-4">
 			<div class="row">
-				<a href=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/imagenes/'.$row->nombre.'"' ?> data-lightbox="galeria"><img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/imagenes/'.$row->nombre.'"' ?>></a>
+				<a href=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/albumes/album-'.$row->id_album.'/'.$row->nombre.'"' ?> data-lightbox="galeria"><img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/albumes/album-'.$row->id_album.'/'.$row->nombre.'"' ?>></a>
 			</div>			
 			<div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
 	            <div class="col-lg-12">
@@ -88,7 +82,7 @@ $this->title = 'Mis imagenes';
 	?>
 		<div class="col-lg-4">
 			<div class="row">
-				<a href=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/imagenes/'.$row->nombre.'"' ?> data-lightbox="galeria"><img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/imagenes/'.$row->nombre.'"' ?>></a>
+				<a href=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/albumes/album-'.$row->id_album.'/'.$row->nombre.'"' ?> data-lightbox="galeria"><img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/albumes/album-'.$row->id_album.'/'.$row->nombre.'"' ?>></a>
 			</div>			
 			<div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
 	            <div class="col-lg-12">
@@ -124,7 +118,7 @@ $this->title = 'Mis imagenes';
 	?>
 		<div class="col-lg-4">
 			<div class="row">
-				<a href=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/imagenes/'.$row->nombre.'"' ?> data-lightbox="galeria"><img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/imagenes/'.$row->nombre.'"' ?>></a>
+				<a href=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/albumes/album-'.$row->id_album.'/'.$row->nombre.'"' ?> data-lightbox="galeria"><img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/albumes/album-'.$row->id_album.'/'.$row->nombre.'"' ?>></a>
 			</div>			
 			<div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
 	            <div class="col-lg-12">
