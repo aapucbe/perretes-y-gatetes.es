@@ -230,3 +230,10 @@ a.desc:after {
         text-align: center;
     }
 }
+.nav-tabs > li.active > a{
+    color: #fff;
+}
+.img-thumbnail{
+    height: 176px;
+    width: 250px;
+}
