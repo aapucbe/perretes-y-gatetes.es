@@ -181,7 +181,7 @@ a.desc:after {
     text-decoration: none;
     color:#fff;
 }
-#crearmascotaform-animal{
+#crearmascotaform-animal,#buscar-mascota-form{
     text-align: left;
 }
 #crearmascotaform-sexo{
@@ -223,10 +223,10 @@ a.desc:after {
         margin-bottom: 1em;
         text-align: center;
     }
-    #crearmascotaform-animal{
+    #crearmascotaform-animal,#buscarmascotasform-animal{
         text-align: center;
     }
-    #crearmascotaform-sexo{
+    #crearmascotaform-sexo,#buscarmascotasform-sexo{
         text-align: center;
     }
 }
@@ -236,4 +236,14 @@ a.desc:after {
 .img-thumbnail{
     height: 176px;
     width: 250px;
+}
+.fila-amigos{
+    margin-bottom: 1em; 
+    margin-left: 1em;
+    margin-top: 1em;
+}
+@media(max-width:1200px) {
+    .fila-amigos{
+        margin: 0;
+    }
 }

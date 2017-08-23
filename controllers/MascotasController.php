@@ -15,6 +15,8 @@ use app\models\CrearmascotaForm;
 use app\models\PerfilmascotaForm;
 use app\models\SubirimagenForm;
 use app\models\CrearalbumForm;
+use app\models\BuscarmascotasForm;
+use app\models\Amigos;
 use yii\web\UploadedFile;
 use yii\web\Session;
 use yii\data\Pagination;
@@ -377,6 +379,65 @@ class MascotasController extends Controller
         }
      
         rmdir($carpeta);
+    }
+
+    public function actionBuscarmascotas(){
+
+        $model = new BuscarmascotasForm();
+
+        # Parametros recibidos por POST mediante el formulario
+        if ($model->load(Yii::$app->request->post())) {
+
+            if ($model->validate()) {
+
+                $mascotas = new Mascotas();
+                $query = "SELECT * FROM mascotas WHERE id NOT LIKE '".$this->getId()."'";
+
+                if (!empty($model->nombre)) {
+                    $query .= " AND nombre LIKE '".$model->nombre."'";
+                }
+
+                if (!empty($model->animal)) {
+                    $query .= " AND animal LIKE '".$model->animal."'";
+                }
+                
+                if (!empty($model->raza)) {
+                    $query .= " AND raza LIKE '".$model->raza."'";
+                }
+                if (!empty($model->sexo)) {
+                    $query .= " AND sexo LIKE '".$model->sexo."'";
+                }
+                if (!empty($model->hogar)) {
+                    $query .= " AND hogar LIKE '".$model->hogar."'";
+                }
+
+                $mascotas = $mascotas->findBySql($query);
+                
+                $countQuery = clone $mascotas;
+                $pages = new Pagination([
+                    'pageSize' => 9,
+                    'totalCount' => $countQuery->count(),            
+                ]);
+                $mascotas = $mascotas->offset($pages->offset)
+                    ->limit($pages->limit)
+                    ->all();
+
+                # Preparamos la lista de amigos para no mostrarlos en la vista
+                $amigos = new Amigos();
+                $query = "SELECT id_amigo FROM amigos WHERE id_mascota LIKE '".$this->getId()."'";
+                $amigos = $amigos->findBySql($query)->all();
+
+                $arrayAmigos = array();
+                foreach ($amigos as $amigo) {
+                    array_push($arrayAmigos, $amigo->id_amigo);
+                }
+
+                return $this->render('resultadobusqueda',['mascotas' => $mascotas, 'pages' => $pages, 'arrayAmigos' => $arrayAmigos]);
+
+            }
+        }
+
+        return $this->render('buscarmascotas',['model' => $model]);
     }
 
 }
