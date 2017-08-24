@@ -440,4 +440,43 @@ class MascotasController extends Controller
         return $this->render('buscarmascotas',['model' => $model]);
     }
 
+    public function actionVeramigos(){
+
+        $id = $this->getId();
+
+        $amigos = new Mascotas();
+        $query = "SELECT * FROM mascotas M, amigos A WHERE A.id_mascota = '". $id."' AND M.id = A.id_amigo";
+        $amigos = $amigos->findBySql($query);
+
+        $countQuery = clone $amigos;
+        $pages = new Pagination([
+            'pageSize' => 9,
+            'totalCount' => $countQuery->count(),            
+        ]);
+        $amigos = $amigos->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        return $this->render('veramigos',['amigos' => $amigos, 'pages' => $pages]);
+    }
+
+    public function actionVerpeticiones(){
+        return $this->render('verpeticiones');
+    }
+
+    public function actionEliminaramigo(){
+
+        $id = $this->getId();
+        $id_amigo = $_POST['id_mascota'];
+
+        # Obtenemos el id de la amistad
+        $amigo = Amigos::find()->where(['id_mascota' => $id, 'id_amigo' => $id_amigo])->all();
+        # Con ese id borramos la amistad
+        $amistad = Amigos::findOne($amigo[0]->id_amistad);
+        $amistad->delete();
+
+        $this->redirect(['mascotas/veramigos']);
+
+    }
+
 }

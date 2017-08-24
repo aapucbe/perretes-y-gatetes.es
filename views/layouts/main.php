@@ -53,7 +53,7 @@ $this->title = 'Perretes y Gatetes';
             ['label' => 'Inicio', 'url' => ['mascotas/index'],'visible' => $session['rol'] == 'mascota'],
             ['label' => 'Mi Muro', 'url' => ['mascotas/index'],'visible' => $session['rol'] == 'mascota','options' => ['class' => 'visible-xs-inline']],
             ['label' => 'Mi Perfil', 'url' => ['mascotas/perfil'],'visible' => $session['rol'] == 'mascota','options' => ['class' => 'visible-xs-inline']],
-            ['label' => 'Mis Amigos', 'url' => ['mascotas/index'],'visible' => $session['rol'] == 'mascota','options' => ['class' => 'visible-xs-inline']],
+            ['label' => 'Mis Amigos', 'url' => ['mascotas/veramigos'],'visible' => $session['rol'] == 'mascota','options' => ['class' => 'visible-xs-inline']],
             ['label' => 'Mis Mensajes', 'url' => ['mascotas/index'],'visible' => $session['rol'] == 'mascota','options' => ['class' => 'visible-xs-inline']],
             ['label' => 'Mis Imagenes', 'url' => ['mascotas/index'],'visible' => $session['rol'] == 'mascota','options' => ['class' => 'visible-xs-inline']],
             ['label' => 'Buscar Mascotas', 'url' => ['mascotas/buscarmascotas'],'visible' => $session['rol'] == 'mascota'],
