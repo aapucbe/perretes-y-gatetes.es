@@ -17,6 +17,7 @@ use app\models\SubirimagenForm;
 use app\models\CrearalbumForm;
 use app\models\BuscarmascotasForm;
 use app\models\Amigos;
+use app\models\Peticiones;
 use yii\web\UploadedFile;
 use yii\web\Session;
 use yii\data\Pagination;
@@ -461,7 +462,22 @@ class MascotasController extends Controller
     }
 
     public function actionVerpeticiones(){
-        return $this->render('verpeticiones');
+        $id = $this->getId();
+
+        $mascotas = new Mascotas();
+        $query = "SELECT * FROM mascotas M, peticiones P WHERE P.id_solicitado = '". $id."' AND M.id = P.id_solicitante";
+        $mascotas = $mascotas->findBySql($query);
+
+        $countQuery = clone $mascotas;
+        $pages = new Pagination([
+            'pageSize' => 9,
+            'totalCount' => $countQuery->count(),            
+        ]);
+        $mascotas = $mascotas->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        return $this->render('verpeticiones',['mascotas' => $mascotas, 'pages' => $pages]);
     }
 
     public function actionEliminaramigo(){
@@ -471,12 +487,74 @@ class MascotasController extends Controller
 
         # Obtenemos el id de la amistad
         $amigo = Amigos::find()->where(['id_mascota' => $id, 'id_amigo' => $id_amigo])->all();
-        # Con ese id borramos la amistad
+        # Con ese id borramos la amistad en un sentido
+        $amistad = Amigos::findOne($amigo[0]->id_amistad);
+        $amistad->delete();
+
+        # Obtenemos el id de la amistad
+        $amigo = Amigos::find()->where(['id_mascota' => $id_amigo, 'id_amigo' => $id])->all();
+        # Con ese id borramos la amistad en el otro sentido
         $amistad = Amigos::findOne($amigo[0]->id_amistad);
         $amistad->delete();
 
         $this->redirect(['mascotas/veramigos']);
 
     }
+
+    public function actionEnviarsolicitud(){
+
+        $id_solicitante = $this->getId();
+        $id_solicitado = $_GET['id_mascota'];
+
+        $peticion = new Peticiones();
+        $peticion->id_solicitante = $id_solicitante;
+        $peticion->id_solicitado = $id_solicitado;
+        $peticion->save();
+
+        return $this->render('solicitudenviada');
+
+    }
+
+    public function actionAceptarpeticion(){
+
+        $id_solicitante = $_GET['id_mascota'];
+        $id_solicitado = $this->getId();
+
+        # Obtenemos el id de la peticion
+        $peticion = Peticiones::find()->where(['id_solicitante' => $id_solicitante, 'id_solicitado' => $id_solicitado])->all();
+
+        # Con ese id borramos la peticion
+        $peticion = Peticiones::findOne($peticion[0]->id_peticion);
+        $peticion->delete();
+
+        # Ahora creamos las relaciones de amistad
+        $amigos = new Amigos();
+        $amigos->id_mascota = $id_solicitado;
+        $amigos->id_amigo = $id_solicitante;
+        $amigos->save();
+
+        $amigos = new Amigos();
+        $amigos->id_mascota = $id_solicitante;
+        $amigos->id_amigo = $id_solicitado;
+        $amigos->save();
+
+        $this->redirect(['mascotas/veramigos']);
+
+    }   
+
+    public function actionRechazarpeticion(){
+
+        $id_solicitante = $_GET['id_mascota'];
+        $id_solicitado = $this->getId();
+
+        # Obtenemos el id de la peticion
+        $peticion = Peticiones::find()->where(['id_solicitante' => $id_solicitante, 'id_solicitado' => $id_solicitado])->all();
+
+        # Con ese id borramos la peticion
+        $peticion = Peticiones::findOne($peticion[0]->id_peticion);
+        $peticion->delete();
+
+        $this->redirect(['mascotas/verpeticiones']);
+    } 
 
 }

@@ -38,7 +38,7 @@ $this->title = 'Mis mascotas';
                     }
                 ?>
                 <div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
-                    <?= Html::a('Añadir', ['usuarios/anadiramigo','id_mascota' => $row->id],['class' => 'btn btn-default']) ?>                 
+                    <?= Html::a('Añadir', ['mascotas/enviarsolicitud','id_mascota' => $row->id],['class' => 'btn btn-default']) ?>                 
                 </div>
             </div>
             <div class="col-lg-1"></div>
@@ -61,7 +61,7 @@ $this->title = 'Mis mascotas';
                     }
                 ?>                
                 <div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
-                    <?= Html::a('Añadir', ['usuarios/anadiramigo','id_mascota' => $row->id],['class' => 'btn btn-default']) ?>                 
+                    <?= Html::a('Añadir', ['mascotas/enviarsolicitud','id_mascota' => $row->id],['class' => 'btn btn-default']) ?>                 
                 </div>
             </div>
         </div>
@@ -83,7 +83,7 @@ $this->title = 'Mis mascotas';
                     }
                 ?>                
                 <div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
-                    <?= Html::a('Añadir', ['usuarios/anadiramigo','id_mascota' => $row->id],['class' => 'btn btn-default']) ?>                 
+                    <?= Html::a('Añadir', ['mascotas/enviarsolicitud','id_mascota' => $row->id],['class' => 'btn btn-default']) ?>                 
                 </div>
             </div>
             <div class="col-lg-1"></div>
