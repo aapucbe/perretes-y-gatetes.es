@@ -13,6 +13,12 @@ use yii\helpers\Url;
 $this->title = 'Mis imagenes';
 ?>
 
+<div class="div-center">
+	<ul class="nav nav-tabs">
+	  <li><?= Html::a('Imágenes', ['mascotas/imagenes']) ?></li>
+	  <li><?= Html::a('Álbumes', ['mascotas/albumes']) ?></li>
+	</ul>
+</div>
 <div class="border-box div-center" style="padding: 15px">
 	<div class="row">
 		<h3><?= $msg ?></h3>
