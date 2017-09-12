@@ -42,7 +42,7 @@
 				  <?= Html::a('Mi Muro', ['mascotas/index'],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Mi Perfil', ['mascotas/perfil'],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Mis Amigos', ['mascotas/veramigos'],['class' => 'list-group-item']) ?>
-				  <?= Html::a('Mis Mensajes', ['mascotas/index'],['class' => 'list-group-item']) ?>
+				  <?= Html::a('Mis Mensajes', ['mascotas/vermsjentrada'],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Mis Imagenes', ['mascotas/imagenes'],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Buscar Mascotas', ['mascotas/buscarmascotas'],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Cambiar Mascota', ['usuarios/vermascotas'],['class' => 'list-group-item']) ?>

@@ -18,6 +18,8 @@ use app\models\CrearalbumForm;
 use app\models\BuscarmascotasForm;
 use app\models\Amigos;
 use app\models\Peticiones;
+use app\models\EnviarmsjForm;
+use app\models\Mensajes;
 use yii\web\UploadedFile;
 use yii\web\Session;
 use yii\data\Pagination;
@@ -556,5 +558,131 @@ class MascotasController extends Controller
 
         $this->redirect(['mascotas/verpeticiones']);
     } 
+
+    public function actionVermsjentrada(){
+
+        $id = $this->getId();
+
+        # Obtenemos todos los mensajes recibidos de la mascota
+        $mensajes = Mensajes::find()->where(['id_receptor' => $id]);
+
+        $countQuery = clone $mensajes;
+        $pages = new Pagination([
+            'pageSize' => 10,
+            'totalCount' => $countQuery->count(),            
+        ]);
+        $mensajes = $mensajes->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        return $this->render('vermsjentrada',['mensajes' => $mensajes,'pages' => $pages]);
+    }
+
+    public function actionVermsjenviados(){
+
+        $id = $this->getId();
+
+        # Obtenemos todos los mensajes enviados por la mascota
+        $mensajes = Mensajes::find()->where(['id_emisor' => $id]);
+
+        $countQuery = clone $mensajes;
+        $pages = new Pagination([
+            'pageSize' => 10,
+            'totalCount' => $countQuery->count(),            
+        ]);
+        $mensajes = $mensajes->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        return $this->render('vermsjenviados',['mensajes' => $mensajes, 'pages' => $pages]);
+    }
+
+    public function actionEnviarmensaje(){
+
+        $model = new EnviarmsjForm();
+        $amigos = new Mascotas();
+        $msg = '';
+        $id = $this->getId();
+        $arrayAmigos = array();
+
+        # Al acceder por GET
+        if (Yii::$app->request->get())
+        {         
+            # Buscamos en la BD todos los amigos de la mascota para poder enviarles mensajes
+            $query = "SELECT * FROM mascotas M, amigos A WHERE A.id_mascota = '". $id."' AND M.id = A.id_amigo";
+            $amigos = $amigos->findBySql($query)->all();
+
+            foreach ($amigos as $row) {
+                $arrayAmigos[$row->id] = $row->nombre;
+            }
+
+            # Pasamos los datos al formulario
+            $model->amigos = $arrayAmigos;
+            $model->id_mascota = $id;
+
+        }
+
+        # Parametros recibidos por POST al actualizar el formulario
+        if($model->load(Yii::$app->request->post()))
+        {
+
+            # Obtenemos la fecha actual para insertarla en la BD
+            $fecha = getdate();
+            $fecha = $fecha['mday'].'-'.$fecha['mon'].'-'.$fecha['year'];
+
+            # Obtenemos los datos de la mascota actual para escribir su nombre en la BD
+            $mascota = Mascotas::findOne($id);
+
+            # Guardamos el mensaje en la BD
+            $mensaje = new Mensajes();
+            $mensaje->id_emisor = $model->id_mascota;
+            $mensaje->nombre_emisor = $mascota->nombre;
+            $mensaje->id_receptor = $model->amigos;
+            $mensaje->nombre_receptor = $arrayAmigos[$model->amigos];
+            $mensaje->asunto = $model->asunto;
+            $mensaje->estado = "no leido";
+            $mensaje->contenido = $model->mensaje;
+            $mensaje->fecha_envio = $fecha;
+            $mensaje->save();
+
+            # Reiniciamos el modelo
+            $model->amigos = $arrayAmigos;
+            $model->asunto = "";
+            $model->mensaje = "";
+
+            $msg = "El mensaje se ha enviado correctamente";
+
+        }
+
+        return $this->render('enviarmensaje',['model' => $model, 'msg' => $msg]);
+
+    }
+
+    public function actionEliminarmsj(){
+
+        # Obtenemos el id enviado por el modal
+        $id_mensaje = $_POST['id_mensaje'];
+
+        # Buscamos el mensaje y lo eliminamos
+        $mensaje = Mensajes::findOne($id_mensaje);
+        $mensaje->delete();
+
+        # Redirigimos a la vista de mensajes de entrada sin el mensaje
+        $this->redirect(['mascotas/vermsjentrada']);
+    }
+
+    public function actionVermsjunico(){
+
+        # Obtenemos el id enviado por el enlace
+        $id_mensaje = $_GET['id_mensaje'];
+
+        # Buscamos el mensaje y actualizamos el estado a 'leido'
+        $mensaje = Mensajes::findOne($id_mensaje);
+        $mensaje->estado = 'leido';
+        $mensaje->update();
+
+        # Renderizamos la vista del mensaje
+        return $this->render('vermsjunico',['mensaje' => $mensaje]);
+    }
 
 }

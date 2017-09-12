@@ -247,3 +247,16 @@ a.desc:after {
         margin: 0;
     }
 }
+.cabecera-tabla{
+    background-color: #EFEFF0;
+}
+.mensaje-no-leido{
+    background-color: #569CFF;
+}
+.cabecera-msjunico{
+    text-align: left;
+    background-color: #EFEFF0;
+}
+.contenido-msjunico{
+    text-align: left;
+}
