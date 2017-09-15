@@ -39,7 +39,7 @@
 					}
 				?>				
 				<div class="list-group sidebar hidden-xs">
-				  <?= Html::a('Mi Muro', ['mascotas/index'],['class' => 'list-group-item']) ?>
+				  <?= Html::a('Mi Muro', ['mascotas/vermuro'],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Mi Perfil', ['mascotas/perfil'],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Mis Amigos', ['mascotas/veramigos'],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Mis Mensajes', ['mascotas/vermsjentrada'],['class' => 'list-group-item']) ?>

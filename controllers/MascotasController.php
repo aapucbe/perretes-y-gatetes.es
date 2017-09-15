@@ -20,6 +20,8 @@ use app\models\Amigos;
 use app\models\Peticiones;
 use app\models\EnviarmsjForm;
 use app\models\Mensajes;
+use app\models\Posts;
+use app\models\CrearpostForm;
 use yii\web\UploadedFile;
 use yii\web\Session;
 use yii\data\Pagination;
@@ -79,7 +81,7 @@ class MascotasController extends Controller
     {
         $session = Yii::$app->session;
         $session->open();
-        return $this->render('index',['session' => $session]);
+        $this->redirect(['mascotas/vermuro']);
     }
 
     public function actionPerfil(){
@@ -683,6 +685,71 @@ class MascotasController extends Controller
 
         # Renderizamos la vista del mensaje
         return $this->render('vermsjunico',['mensaje' => $mensaje]);
+    }
+
+    public function actionVermuro(){
+
+        # Obtenemos el id actual de la mascota y lo pasamos al ActiveForm
+        $id = $this->getId();
+        $model = new CrearpostForm();
+        $model->id_mascota = $id;
+
+        # Si enviamos el formulario
+        if($model->load(Yii::$app->request->post()))
+        {
+            if ($model->validate()){
+                $post = new Posts();
+                $post->id_mascota = $model->id_mascota;
+                $post->contenido = $model->contenido;
+
+                # Comprobamos si se ha subido una imagen y la guardamos tanto en la carpeta adecuada como en la BD
+                if ($model->imagen = UploadedFile::getInstance($model, 'imagen')) {
+
+                    $model->upload_imagen();
+                    $post->imagen = ''.$model->imagen->name;    
+                }
+
+                $post->save();
+                $model->contenido = '';
+
+            }
+        }
+
+        $posts = Posts::find()->where(['id_mascota' => $id])->orderBy('id DESC');
+
+        $countQuery = clone $posts;
+        $pages = new Pagination([
+            'pageSize' => 5,
+            'totalCount' => $countQuery->count(),            
+        ]);
+        $posts = $posts->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        return $this->render('vermuro',['model' => $model, 'pages' => $pages, 'posts' => $posts]);
+    }
+
+
+    public function actionEliminarpost(){
+
+        # Obtenemos el id enviado por el modal
+        $id_post = $_POST['id_post'];
+
+        # Obtenemos los datos del post para eliminar la imagen si existe
+        $post = Posts::findOne($id_post);
+        if($post->imagen != '')
+        {
+            # Eliminamos la imagen
+            unlink(Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$post->id_mascota.'/posts/'.$post->imagen);
+
+        }        
+
+        # Eliminamos el post de la BD
+        $post->delete();
+
+        # Redirigimos a la vista del muro
+        $this->redirect(['mascotas/vermuro']);
+
     }
 
 }

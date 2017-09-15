@@ -204,6 +204,8 @@ class UsuariosController extends Controller
                     mkdir($dirImagenes, 0777, true);
                     $dirAlbumes = $dir.'/albumes';
                     mkdir($dirAlbumes, 0777, true);
+                    $dirPosts = $dir.'/posts';
+                    mkdir($dirPosts, 0777, true);
                     $msg = "La mascota ha sido insertada con exito";
 
                     # Reiniciamos el modelo de formulario
