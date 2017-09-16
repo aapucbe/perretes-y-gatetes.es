@@ -12,6 +12,12 @@ use yii\helpers\Url;
 
 $this->title = 'Crear Álbum';
 ?>
+<div class="div-center">
+	<ul class="nav nav-tabs">
+	  <li><?= Html::a('Imágenes', ['mascotas/imagenes']) ?></li>
+	  <li class="active"><?= Html::a('Álbumes', ['mascotas/albumes']) ?></li>
+	</ul>
+</div>
 <div class="border-box div-center" style="padding: 15px">
 	<div class="row">
 		<?php $form = ActiveForm::begin([

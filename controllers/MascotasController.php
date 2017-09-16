@@ -170,23 +170,7 @@ class MascotasController extends Controller
 
         $model = new SubirimagenForm();
         $msg = '';
-
-        $query = Imagenes::find()->where(['id_mascota' => $this->getId(), 'id_album' => 0]);
-        $countQuery = clone $query;
-        $pages = new Pagination([
-            'pageSize' => 9,
-            'totalCount' => $countQuery->count(),            
-        ]);
-        $imagenes = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
-
-        # Al acceder por GET inicializaremos las variables id_mascota e id_album
-        if (Yii::$app->request->get()){
-            $model->id_mascota = $this->getId();
-            $model->id_album = 0;
-
-        }
+        $id_amigo = '';
 
         # Parametros recibidos por POST mediante el formulario
         if ($model->load(Yii::$app->request->post())) {
@@ -209,13 +193,38 @@ class MascotasController extends Controller
                 }else{
                     $msg = 'Seleccione una imagen para subir';
                 }
-
                 
-            }          
+            }        
 
         }
 
-        return $this->render('imagenes',['model' => $model,'msg' => $msg, 'imagenes' => $imagenes, 'pages' => $pages]);
+        # Comprobamos si se esta accediendo para ver el perfil del amigo a nuestras imágenes
+        if (Yii::$app->request->get('id_amigo'))
+        {
+            $id_amigo = $_GET['id_amigo'];
+            $query = Imagenes::find()->where(['id_mascota' => $id_amigo, 'id_album' => 0]);
+        }else
+        {
+            $query = Imagenes::find()->where(['id_mascota' => $this->getId(), 'id_album' => 0]);
+        }        
+
+        $countQuery = clone $query;
+        $pages = new Pagination([
+            'pageSize' => 9,
+            'totalCount' => $countQuery->count(),            
+        ]);
+        $imagenes = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        # Al acceder por GET inicializaremos las variables id_mascota e id_album
+        if (Yii::$app->request->get()){
+            $model->id_mascota = $this->getId();
+            $model->id_album = 0;
+
+        }
+
+        return $this->render('imagenes',['model' => $model,'msg' => $msg, 'imagenes' => $imagenes, 'pages' => $pages,'id_amigo' => $id_amigo]);
     }
 
     public function actionEliminarimagen(){
@@ -245,7 +254,18 @@ class MascotasController extends Controller
 
     public function actionAlbumes(){
 
-        $query = Albumes::find()->where(['id_mascota' => $this->getId()]);
+        $id_amigos = '';
+
+        # Comprobamos si se esta accediendo para ver el perfil del amigo a nuestras imágenes
+        if (Yii::$app->request->get('id_amigo'))
+        {
+            $id_amigo = $_GET['id_amigo'];
+            $query = Albumes::find()->where(['id_mascota' => $id_amigo]);
+        }else
+        {
+            $query = Albumes::find()->where(['id_mascota' => $this->getId()]);
+        }
+        
         $countQuery = clone $query;
         $pages = new Pagination([
             'pageSize' => 9,
@@ -255,7 +275,7 @@ class MascotasController extends Controller
             ->limit($pages->limit)
             ->all();
 
-        return $this->render('albumes',['pages' => $pages, 'albumes' => $albumes]);
+        return $this->render('albumes',['pages' => $pages, 'albumes' => $albumes,'id_amigo' => $id_amigo]);
     }
 
     public function actionCrearalbum(){
@@ -292,26 +312,18 @@ class MascotasController extends Controller
 
     public function actionAccederalbum(){
 
-        if (Yii::$app->request->get()){
+            $id_amigo = '';
+
+             # Comprobamos si se esta accediendo para ver el perfil del amigo a nuestras imágenes
+            if (Yii::$app->request->get('id_amigo'))
+            {
+                $id_amigo = $_GET['id_amigo'];
+            }
+
             # Obtenemos el id del álbum enviado por GET
             $id_album = $_GET['id_album'];
             $model = new SubirimagenForm();
             $msg = '';
-
-            $query = Imagenes::find()->where(['id_album' => $id_album]);
-            $countQuery = clone $query;
-            $pages = new Pagination([
-                'pageSize' => 9,
-                'totalCount' => $countQuery->count(),            
-            ]);
-            $imagenes = $query->offset($pages->offset)
-                ->limit($pages->limit)
-                ->all();
-
-            # Al acceder por GET inicializaremos las variables id_mascota e id_album
-            $model->id_mascota = $this->getId();
-            $model->id_album = $id_album;
-
 
             # Parametros recibidos por POST mediante el formulario
             if ($model->load(Yii::$app->request->post())) {
@@ -340,8 +352,21 @@ class MascotasController extends Controller
 
             }
 
-            return $this->render('accederalbum',['model' => $model,'msg' => $msg, 'imagenes' => $imagenes, 'pages' => $pages]);
-        }    
+            $query = Imagenes::find()->where(['id_album' => $id_album]);
+            $countQuery = clone $query;
+            $pages = new Pagination([
+                'pageSize' => 9,
+                'totalCount' => $countQuery->count(),            
+            ]);
+            $imagenes = $query->offset($pages->offset)
+                ->limit($pages->limit)
+                ->all();
+
+            # Al acceder por GET inicializaremos las variables id_mascota e id_album
+            $model->id_mascota = $this->getId();
+            $model->id_album = $id_album;
+
+            return $this->render('accederalbum',['model' => $model,'msg' => $msg, 'imagenes' => $imagenes, 'pages' => $pages, 'id_amigo' => $id_amigo]);
     }
 
     public function actionEliminaralbum(){
@@ -689,10 +714,22 @@ class MascotasController extends Controller
 
     public function actionVermuro(){
 
+        $id_amigo = '';
+
         # Obtenemos el id actual de la mascota y lo pasamos al ActiveForm
         $id = $this->getId();
         $model = new CrearpostForm();
         $model->id_mascota = $id;
+
+        # Comprobamos si se esta accediendo para ver el perfil del amigo a nuestras imágenes
+        if (Yii::$app->request->get('id_amigo'))
+        {
+            $id_amigo = $_GET['id_amigo'];
+            $posts = Posts::find()->where(['id_mascota' => $id_amigo])->orderBy('id DESC');
+        }else
+        {
+            $posts = Posts::find()->where(['id_mascota' => $id])->orderBy('id DESC');
+        }        
 
         # Si enviamos el formulario
         if($model->load(Yii::$app->request->post()))
@@ -715,8 +752,6 @@ class MascotasController extends Controller
             }
         }
 
-        $posts = Posts::find()->where(['id_mascota' => $id])->orderBy('id DESC');
-
         $countQuery = clone $posts;
         $pages = new Pagination([
             'pageSize' => 5,
@@ -726,7 +761,7 @@ class MascotasController extends Controller
             ->limit($pages->limit)
             ->all();
 
-        return $this->render('vermuro',['model' => $model, 'pages' => $pages, 'posts' => $posts]);
+        return $this->render('vermuro',['model' => $model, 'pages' => $pages, 'posts' => $posts,'id_amigo' => $id_amigo]);
     }
 
 
@@ -750,6 +785,60 @@ class MascotasController extends Controller
         # Redirigimos a la vista del muro
         $this->redirect(['mascotas/vermuro']);
 
+    }
+
+    # Ver algunos datos del perfil de la mascota amiga
+    public function actionVerperfil(){
+
+        $id_amigo = $_GET['id_amigo'];
+
+        $amigo = Mascotas::findOne($id_amigo);
+        $edad = $this->edad($amigo->fecha_nacimiento);
+
+        return $this->render('verperfil',['id_amigo' => $id_amigo, 'amigo' => $amigo,'edad' => $edad]);
+    }
+
+    # Ver algunos datos del perfil de dueño de una mascota amiga
+    public function actionVerdueno(){
+        $id_amigo = $_GET['id_amigo'];
+
+        $amigo = Mascotas::findOne($id_amigo);
+        $dueno = Usuarios::findOne($amigo->id_usuario);
+        $edad = $this->edad($dueno->fecha_nacimiento);
+
+        return $this->render('verdueno',['id_amigo' => $id_amigo, 'dueno' => $dueno,'edad' => $edad]);
+    }
+
+    # Calclamos la edad a partir de una fecha en formato dd-mm-yyy
+    public function edad($fecha){
+        
+        # Fecha actual
+        $dia = date(j);
+        $mes = date(n);
+        $ano = date(Y);
+
+        # fecha de nacimiento
+        $fecha = explode('-', $fecha);
+        $dianacimiento = $fecha[0];
+        $mesnacimiento = $fecha[1];
+        $anonacimiento = $fecha[2];
+
+        # Si el mes es el mismo pero el día inferior aun no ha cumplido años, le quitaremos un año al actual
+        if (($mesnacimiento == $mes) && ($dianacimiento > $dia)) 
+        {
+            $ano = ($ano-1); 
+        }
+
+        # Si el mes es superior al actual tampoco habrá cumplido años, por eso le quitamos un año al actual
+        if ($mesnacimiento > $mes) 
+        {
+            $ano = ($ano-1);
+        }
+
+        # Ya no habría mas condiciones, ahora simplemente restamos los años y mostramos el resultado como su edad
+        $edad = ($ano-$anonacimiento);
+
+        return $edad;
     }
 
 }

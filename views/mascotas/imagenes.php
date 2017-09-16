@@ -11,6 +11,23 @@ use yii\widgets\LinkPager;
 use yii\helpers\Url;
 
 $this->title = 'Mis imagenes';
+
+if ($id_amigo != '') {
+
+?>
+
+<div class="div-center">
+	<ul class="nav nav-tabs">
+	  <li><?= Html::a('Perfil', ['mascotas/verperfil', 'id_amigo' => $id_amigo]) ?></li>
+	  <li><?= Html::a('Muro', ['mascotas/vermuro', 'id_amigo' => $id_amigo]) ?></li>
+	  <li class="active"><?= Html::a('Imágenes', ['mascotas/imagenes', 'id_amigo' => $id_amigo]) ?></li>
+	  <li><?= Html::a('Álbumes', ['mascotas/albumes', 'id_amigo' => $id_amigo]) ?></li>
+	  <li><?= Html::a('Dueño', ['mascotas/verdueno', 'id_amigo' => $id_amigo]) ?></li>
+	</ul>
+</div>
+
+<?php
+}else{
 ?>
 
 <div class="div-center">
@@ -19,11 +36,17 @@ $this->title = 'Mis imagenes';
 	  <li><?= Html::a('Álbumes', ['mascotas/albumes']) ?></li>
 	</ul>
 </div>
+
+<?php
+}
+?>
+
 <div class="border-box div-center" style="padding: 15px">
-	<div class="row">
-		<h3><?= $msg ?></h3>
-	</div>
-	<div class="row">
+
+<?php
+if ($id_amigo == ''){
+?>
+	<div class="row fila-amigos">
 		<?php $form = ActiveForm::begin([
             'id' => 'miperfil-form',
             'layout' => 'horizontal',
@@ -43,6 +66,7 @@ $this->title = 'Mis imagenes';
 	</div>
 
 	<?php
+		}
 		$i=1;
 		foreach($imagenes as $row):
 			if($i%3 == 1){
@@ -52,7 +76,10 @@ $this->title = 'Mis imagenes';
 		<div class="col-lg-4">
 			<div class="row">
 				<a href=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/imagenes/'.$row->nombre.'"' ?> data-lightbox="galeria"><img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/imagenes/'.$row->nombre.'"' ?>></a>
-			</div>			
+			</div>	
+			<?php
+			if ($id_amigo == ''){
+			?>
 			<div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
 	            <div class="col-lg-12">
 	                <!-- Utilizamos un modal para que diga si esta seguro de eliminar la mascota -->               
@@ -80,6 +107,9 @@ $this->title = 'Mis imagenes';
 	                </div><!-- /.modal -->              
 	            </div>                    
 	        </div>
+			<?php
+			}
+			?>
 	    </div>
 
 	<?php
@@ -89,7 +119,10 @@ $this->title = 'Mis imagenes';
 		<div class="col-lg-4">
 			<div class="row">
 				<a href=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/imagenes/'.$row->nombre.'"' ?> data-lightbox="galeria"><img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/imagenes/'.$row->nombre.'"' ?>></a>
-			</div>			
+			</div>
+			<?php
+			if ($id_amigo == ''){
+			?>			
 			<div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
 	            <div class="col-lg-12">
 	                <!-- Utilizamos un modal para que diga si esta seguro de eliminar la mascota -->               
@@ -117,6 +150,9 @@ $this->title = 'Mis imagenes';
 	                </div><!-- /.modal -->              
 	            </div>                    
 	        </div>
+	        <?php
+			}
+			?>
 	    </div>
 	<?php
 		$i++;
@@ -125,7 +161,10 @@ $this->title = 'Mis imagenes';
 		<div class="col-lg-4">
 			<div class="row">
 				<a href=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/imagenes/'.$row->nombre.'"' ?> data-lightbox="galeria"><img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$row->id_mascota.'/imagenes/'.$row->nombre.'"' ?>></a>
-			</div>			
+			</div>
+			<?php
+			if ($id_amigo == ''){
+			?>				
 			<div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
 	            <div class="col-lg-12">
 	                <!-- Utilizamos un modal para que diga si esta seguro de eliminar la mascota -->               
@@ -153,6 +192,9 @@ $this->title = 'Mis imagenes';
 	                </div><!-- /.modal -->              
 	            </div>                    
 	        </div>
+	        <?php
+			}
+			?>
 	    </div>
 	</div>
 		<br>

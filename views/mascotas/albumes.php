@@ -11,6 +11,22 @@ use yii\widgets\LinkPager;
 use yii\helpers\Url;
 
 $this->title = 'Mis álbumes';
+if ($id_amigo != '') {
+
+?>
+
+<div class="div-center">
+	<ul class="nav nav-tabs">
+	  <li><?= Html::a('Perfil', ['mascotas/verperfil', 'id_amigo' => $id_amigo]) ?></li>
+	  <li><?= Html::a('Muro', ['mascotas/vermuro', 'id_amigo' => $id_amigo]) ?></li>
+	  <li><?= Html::a('Imágenes', ['mascotas/imagenes', 'id_amigo' => $id_amigo]) ?></li>
+	  <li class="active"><?= Html::a('Álbumes', ['mascotas/albumes', 'id_amigo' => $id_amigo]) ?></li>
+	  <li><?= Html::a('Dueño', ['mascotas/verdueno', 'id_amigo' => $id_amigo]) ?></li>
+	</ul>
+</div>
+
+<?php
+}else{
 ?>
 
 <div class="div-center">
@@ -19,12 +35,22 @@ $this->title = 'Mis álbumes';
 	  <li class="active"><?= Html::a('Álbumes', ['mascotas/albumes']) ?></li>
 	</ul>
 </div>
+
+<?php
+}
+?>
+
 <div class="border-box div-center" style="padding: 15px">
+
+	<?php
+	if ($id_amigo == '') {
+	?>
 	<div class="row">
 		<?= Html::a('Crear álbum', ['mascotas/crearalbum'],['class' => 'btn btn-primary']) ?>
 	</div>
 	<hr>
 	<?php
+		}
 		$i=1;
 		foreach($albumes as $row):
 			if($i%3 == 1){
@@ -38,7 +64,10 @@ $this->title = 'Mis álbumes';
 					<img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].$row->imagen_destacada.'"' ?>>
 				</div>			
 				<div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
-		            <div class="col-lg-12">
+					<?php
+					if ($id_amigo == '') {
+					?>
+		            <div class="col-lg-12">		            
 		            	<div class="col-lg-6 col-md-6 div-acceder"><?= Html::a('Acceder', ['mascotas/accederalbum','id_album' => $row->id],['class' => 'btn btn-default']) ?></div>
 		            	<div class="col-lg-6 col-md-6 div-eliminar">
 		                	<!-- Utilizamos un modal para que diga si esta seguro de eliminar la mascota -->               
@@ -64,7 +93,16 @@ $this->title = 'Mis álbumes';
 			                          </div><!-- /.modal-dialog -->
 			                </div><!-- /.modal -->
 			            </div>              
-		            </div>                    
+		            </div> 
+					<?php
+					}else{
+					?>
+					<div class="col-lg-12">
+						<div class="col-lg-12 col-md-12"><?= Html::a('Acceder', ['mascotas/accederalbum','id_album' => $row->id,'id_amigo' => $id_amigo],['class' => 'btn btn-default']) ?></div>
+					</div>
+					<?php
+					}
+					?>
 		        </div>
 		    </div>
 
@@ -80,6 +118,9 @@ $this->title = 'Mis álbumes';
 					<img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].$row->imagen_destacada.'"' ?>>
 				</div>			
 				<div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
+		            <?php
+					if ($id_amigo == '') {
+					?>
 		            <div class="col-lg-12">
 		            	<div class="col-lg-6 col-md-6 div-acceder"><?= Html::a('Acceder', ['mascotas/accederalbum','id_album' => $row->id],['class' => 'btn btn-default']) ?></div>
 		            	<div class="col-lg-6 col-md-6 div-eliminar">
@@ -106,7 +147,16 @@ $this->title = 'Mis álbumes';
 			                          </div><!-- /.modal-dialog -->
 			                </div><!-- /.modal -->
 			            </div>              
-		            </div>                    
+		            </div> 
+					<?php
+					}else{
+					?>
+					<div class="col-lg-12">
+						<div class="col-lg-12 col-md-12"><?= Html::a('Acceder', ['mascotas/accederalbum','id_album' => $row->id,'id_amigo' => $id_amigo],['class' => 'btn btn-default']) ?></div>
+					</div>
+					<?php
+					}
+					?>
 		        </div>
 		    </div>
 		<?php
@@ -121,6 +171,9 @@ $this->title = 'Mis álbumes';
 					<img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].$row->imagen_destacada.'"' ?>>
 				</div>			
 				<div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
+					<?php
+					if ($id_amigo == '') {
+					?>
 		            <div class="col-lg-12">
 		            	<div class="col-lg-6 col-md-6 div-acceder"><?= Html::a('Acceder', ['mascotas/accederalbum','id_album' => $row->id],['class' => 'btn btn-default']) ?></div>
 		            	<div class="col-lg-6 col-md-6 div-eliminar">
@@ -147,7 +200,16 @@ $this->title = 'Mis álbumes';
 			                          </div><!-- /.modal-dialog -->
 			                </div><!-- /.modal -->
 			            </div>              
-		            </div>                    
+		            </div>
+					<?php
+					}else{
+					?>
+					<div class="col-lg-12">
+						<div class="col-lg-12 col-md-12"><?= Html::a('Acceder', ['mascotas/accederalbum','id_album' => $row->id,'id_amigo' => $id_amigo],['class' => 'btn btn-default']) ?></div>
+					</div>
+					<?php
+					}
+					?>
 		        </div>
 		    </div>
 		</div>
