@@ -57,6 +57,7 @@ $this->title = 'Perretes y Gatetes';
             ['label' => 'Mis Mensajes', 'url' => ['mascotas/vermsjentrada'],'visible' => $session['rol'] == 'mascota','options' => ['class' => 'visible-xs-inline']],
             ['label' => 'Mis Imagenes', 'url' => ['mascotas/imagenes'],'visible' => $session['rol'] == 'mascota','options' => ['class' => 'visible-xs-inline']],
             ['label' => 'Buscar Mascotas', 'url' => ['mascotas/buscarmascotas'],'visible' => $session['rol'] == 'mascota'],
+            ['label' => 'Buscar Cruce', 'url' => ['mascotas/buscarcruce'],'visible' => $session['rol'] == 'mascota'],
             ['label' => 'Cambiar Mascota', 'url' => ['usuarios/vermascotas'],'visible' => $session['rol'] == 'mascota'],
 
             // Se añade ['data-method' => 'post'] porque la acción logout() solo puede ser tratada mediante este método

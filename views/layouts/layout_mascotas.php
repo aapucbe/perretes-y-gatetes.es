@@ -45,6 +45,7 @@
 				  <?= Html::a('Mis Mensajes', ['mascotas/vermsjentrada'],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Mis Imagenes', ['mascotas/imagenes'],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Buscar Mascotas', ['mascotas/buscarmascotas'],['class' => 'list-group-item']) ?>
+				  <?= Html::a('Buscar Cruce', ['mascotas/buscarcruce'],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Cambiar Mascota', ['usuarios/vermascotas'],['class' => 'list-group-item']) ?>
 				</div>
 			</div>

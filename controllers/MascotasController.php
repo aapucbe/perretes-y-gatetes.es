@@ -22,6 +22,7 @@ use app\models\EnviarmsjForm;
 use app\models\Mensajes;
 use app\models\Posts;
 use app\models\CrearpostForm;
+use app\models\BuscarcruceForm;
 use yii\web\UploadedFile;
 use yii\web\Session;
 use yii\data\Pagination;
@@ -88,6 +89,7 @@ class MascotasController extends Controller
 
         $model = new PerfilmascotaForm;
         $msg = null;
+        $cruce = '';
 
         # Parametros recibidos por POST al actualizar el formulario
         if($model->load(Yii::$app->request->post()))
@@ -115,6 +117,7 @@ class MascotasController extends Controller
                     $mascota->nombre = $model->nombre;
                     $mascota->raza = $model->raza;
                     $mascota->hogar = $model->hogar;
+                    $mascota->cruce = $model->cruce;
                     $mascota->fecha_nacimiento = $model->fecha_nacimiento;
                     $mascota->descripcion = $model->descripcion;                  
 
@@ -139,6 +142,8 @@ class MascotasController extends Controller
 
             # Guardamos los datos para insertarlos en el formulario al modo de placeholders
             $mascota = Mascotas::findOne($id);
+            # Comprobamos si la mascota está buscando un cruce o no
+            $cruce = $mascota->cruce;
             # Comprobamos que exista ese id
             if($mascota)
             {
@@ -154,7 +159,7 @@ class MascotasController extends Controller
 
         }        
 
-        return $this->render('perfil',['model' => $model, 'msg' => $msg]);
+        return $this->render('perfil',['model' => $model, 'msg' => $msg, 'cruce' => $cruce]);
     }
 
     # Obtenemos el id de la mascota actual
@@ -171,6 +176,12 @@ class MascotasController extends Controller
         $model = new SubirimagenForm();
         $msg = '';
         $id_amigo = '';
+
+        # Comprobamos si se esta accediendo desde la vvista de buscar cruce
+        $cruce = '';
+        if ($_GET['cruce'] == 'Si') {
+            $cruce = 'Si';
+        }
 
         # Parametros recibidos por POST mediante el formulario
         if ($model->load(Yii::$app->request->post())) {
@@ -224,7 +235,7 @@ class MascotasController extends Controller
 
         }
 
-        return $this->render('imagenes',['model' => $model,'msg' => $msg, 'imagenes' => $imagenes, 'pages' => $pages,'id_amigo' => $id_amigo]);
+        return $this->render('imagenes',['model' => $model,'msg' => $msg, 'imagenes' => $imagenes, 'pages' => $pages,'id_amigo' => $id_amigo, 'cruce' => $cruce]);
     }
 
     public function actionEliminarimagen(){
@@ -256,6 +267,12 @@ class MascotasController extends Controller
 
         $id_amigos = '';
 
+        # Comprobamos si se esta accediendo desde la vvista de buscar cruce
+        $cruce = '';
+        if ($_GET['cruce'] == 'Si') {
+            $cruce = 'Si';
+        }
+
         # Comprobamos si se esta accediendo para ver el perfil del amigo a nuestras imágenes
         if (Yii::$app->request->get('id_amigo'))
         {
@@ -275,7 +292,7 @@ class MascotasController extends Controller
             ->limit($pages->limit)
             ->all();
 
-        return $this->render('albumes',['pages' => $pages, 'albumes' => $albumes,'id_amigo' => $id_amigo]);
+        return $this->render('albumes',['pages' => $pages, 'albumes' => $albumes,'id_amigo' => $id_amigo, 'cruce' => $cruce]);
     }
 
     public function actionCrearalbum(){
@@ -313,6 +330,12 @@ class MascotasController extends Controller
     public function actionAccederalbum(){
 
             $id_amigo = '';
+
+            # Comprobamos si se esta accediendo desde la vvista de buscar cruce
+            $cruce = '';
+            if ($_GET['cruce'] == 'Si') {
+                $cruce = 'Si';
+            }
 
              # Comprobamos si se esta accediendo para ver el perfil del amigo a nuestras imágenes
             if (Yii::$app->request->get('id_amigo'))
@@ -366,7 +389,7 @@ class MascotasController extends Controller
             $model->id_mascota = $this->getId();
             $model->id_album = $id_album;
 
-            return $this->render('accederalbum',['model' => $model,'msg' => $msg, 'imagenes' => $imagenes, 'pages' => $pages, 'id_amigo' => $id_amigo]);
+            return $this->render('accederalbum',['model' => $model,'msg' => $msg, 'imagenes' => $imagenes, 'pages' => $pages, 'id_amigo' => $id_amigo, 'cruce' => $cruce]);
     }
 
     public function actionEliminaralbum(){
@@ -462,7 +485,10 @@ class MascotasController extends Controller
                     array_push($arrayAmigos, $amigo->id_amigo);
                 }
 
-                return $this->render('resultadobusqueda',['mascotas' => $mascotas, 'pages' => $pages, 'arrayAmigos' => $arrayAmigos]);
+                # Esta variable la utilizaremos para distinguir entre una búsqueda de amigos y una búsqueda de cruce
+                $cruce = 'No';
+
+                return $this->render('resultadobusqueda',['mascotas' => $mascotas, 'pages' => $pages, 'arrayAmigos' => $arrayAmigos, 'cruce' => $cruce]);
 
             }
         }
@@ -715,11 +741,17 @@ class MascotasController extends Controller
     public function actionVermuro(){
 
         $id_amigo = '';
+        $cruce = '';
 
         # Obtenemos el id actual de la mascota y lo pasamos al ActiveForm
         $id = $this->getId();
         $model = new CrearpostForm();
         $model->id_mascota = $id;
+
+        # Comprobamos si se esta accediendo desde la busqueda de un cruce
+        if ($_GET['cruce'] == 'Si') {
+            $cruce = 'Si';
+        }
 
         # Comprobamos si se esta accediendo para ver el perfil del amigo a nuestras imágenes
         if (Yii::$app->request->get('id_amigo'))
@@ -761,7 +793,7 @@ class MascotasController extends Controller
             ->limit($pages->limit)
             ->all();
 
-        return $this->render('vermuro',['model' => $model, 'pages' => $pages, 'posts' => $posts,'id_amigo' => $id_amigo]);
+        return $this->render('vermuro',['model' => $model, 'pages' => $pages, 'posts' => $posts,'id_amigo' => $id_amigo, 'cruce' => $cruce]);
     }
 
 
@@ -790,23 +822,35 @@ class MascotasController extends Controller
     # Ver algunos datos del perfil de la mascota amiga
     public function actionVerperfil(){
 
+        $cruce = '';
+
         $id_amigo = $_GET['id_amigo'];
 
         $amigo = Mascotas::findOne($id_amigo);
         $edad = $this->edad($amigo->fecha_nacimiento);
 
-        return $this->render('verperfil',['id_amigo' => $id_amigo, 'amigo' => $amigo,'edad' => $edad]);
+        if ($_GET['cruce'] == 'Si') {
+            $cruce = 'Si';
+        }
+
+        return $this->render('verperfil',['id_amigo' => $id_amigo, 'amigo' => $amigo,'edad' => $edad, 'cruce' => $cruce]);
     }
 
     # Ver algunos datos del perfil de dueño de una mascota amiga
     public function actionVerdueno(){
         $id_amigo = $_GET['id_amigo'];
 
+        # Comprobamos si se esta accediendo desde la vvista de buscar cruce
+        $cruce = '';
+        if ($_GET['cruce'] == 'Si') {
+            $cruce = 'Si';
+        }
+
         $amigo = Mascotas::findOne($id_amigo);
         $dueno = Usuarios::findOne($amigo->id_usuario);
         $edad = $this->edad($dueno->fecha_nacimiento);
 
-        return $this->render('verdueno',['id_amigo' => $id_amigo, 'dueno' => $dueno,'edad' => $edad]);
+        return $this->render('verdueno',['id_amigo' => $id_amigo, 'dueno' => $dueno,'edad' => $edad, 'cruce' => $cruce]);
     }
 
     # Calclamos la edad a partir de una fecha en formato dd-mm-yyy
@@ -839,6 +883,138 @@ class MascotasController extends Controller
         $edad = ($ano-$anonacimiento);
 
         return $edad;
+    }
+
+    # Formulario para buscar una mascota para cruzarse
+    public function actionBuscarcruce(){
+
+        $model = new BuscarcruceForm();
+        $id = $this->getId();
+
+        $mascota = Mascotas::findOne($id);
+
+        # Parametros recibidos por POST mediante el formulario
+        if ($model->load(Yii::$app->request->post())) {
+
+            if ($model->validate()) {
+
+                $mascotas = new Mascotas();
+                $query = "SELECT * FROM mascotas WHERE id NOT LIKE '".$id."' AND cruce = 'Si'";
+
+                # No es necesario comprobar péro lo haremos por precaución
+                if (!empty($model->animal)) {
+                    $query .= " AND animal LIKE '".$model->animal."'";
+                }
+                
+                if (!empty($model->raza)) {
+                    $query .= " AND raza LIKE '".$model->raza."'";
+                }
+
+                # No es necesario comprobar péro lo haremos por precaución
+                if (!empty($model->sexo)) {
+                    $query .= " AND sexo LIKE '".$model->sexo."'";
+                }
+
+                if (!empty($model->hogar)) {
+                    $query .= " AND hogar LIKE '".$model->hogar."'";
+                }
+
+                $mascotas = $mascotas->findBySql($query);
+                
+                $countQuery = clone $mascotas;
+                $pages = new Pagination([
+                    'pageSize' => 9,
+                    'totalCount' => $countQuery->count(),            
+                ]);
+                $mascotas = $mascotas->offset($pages->offset)
+                    ->limit($pages->limit)
+                    ->all();
+
+                $cruce = 'Si';
+
+                return $this->render('resultadobusqueda',['mascotas' => $mascotas, 'pages' => $pages, 'cruce' => $cruce]);
+
+            }
+        }
+
+        # Seleccionamos el sexo adecuado para el cruce
+        if ($mascota->sexo == 'macho') {
+            $model->sexo = 'hembra';
+        }else if ($mascota->sexo == 'hembra') {
+            $model->sexo = 'macho';
+        }
+
+        $model->animal = $mascota->animal;
+        $model->raza = $mascota->raza;
+        $model->hogar = $mascota->hogar;
+
+        return $this->render('buscarcruce',['model' => $model]);
+    }
+
+    # Funcion para enviar un mensaje a la mascota para cruzarse
+    public function actionEnviarmsjcruce(){
+
+        $model = new EnviarmsjForm();
+        $amigos = new Mascotas();
+        $msg = '';
+        $id = $this->getId();
+        $arrayAmigos = array();
+
+        # Comprobamos si se esta accediendo desde la vvista de buscar cruce
+        $cruce = '';
+        if ($_GET['cruce'] == 'Si') {
+            $cruce = 'Si';
+        }
+
+        # Guardamos el id_amigo
+        $id_amigo = $_GET['id_amigo'];
+
+        # Al acceder por GET
+        if (Yii::$app->request->get())
+        {         
+            # Pasamos los datos al formulario
+            $model->amigos = $id_amigo;
+            $model->id_mascota = $id;
+            $model->asunto = 'Alguien quiere cruzarse contigo';
+
+        }
+
+        # Parametros recibidos por POST al actualizar el formulario
+        if($model->load(Yii::$app->request->post()))
+        {
+
+            # Obtenemos la fecha actual para insertarla en la BD
+            $fecha = getdate();
+            $fecha = $fecha['mday'].'-'.$fecha['mon'].'-'.$fecha['year'];
+
+            # Obtenemos los datos de la mascota actual para escribir su nombre en la BD
+            $mascota = Mascotas::findOne($id);
+
+            # Obtenemos la mascota amiga para obtener su nombre
+            $mascota_amiga = Mascotas::findOne($id_amigo);
+
+            # Guardamos el mensaje en la BD
+            $mensaje = new Mensajes();
+            $mensaje->id_emisor = $model->id_mascota;
+            $mensaje->nombre_emisor = $mascota->nombre;
+            $mensaje->id_receptor = $model->amigos;
+            $mensaje->nombre_receptor = $mascota_amiga->nombre;;
+            $mensaje->asunto = $model->asunto;
+            $mensaje->estado = "no leido";
+            $mensaje->contenido = $model->mensaje;
+            $mensaje->fecha_envio = $fecha;
+            $mensaje->save();
+
+            # Reiniciamos el modelo
+            $model->amigos = $id_amigo;
+            $model->asunto = 'Alguien quiere cruzarse contigo';
+            $model->mensaje = "";
+
+            $msg = "El mensaje se ha enviado correctamente";
+
+        }
+
+        return $this->render('enviarmsjcruce',['model' => $model, 'msg' => $msg, 'id_amigo' => $id_amigo, 'cruce' => $cruce]);
     }
 
 }

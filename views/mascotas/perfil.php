@@ -27,6 +27,20 @@ $this->title = 'Mi perfil';
 
     <?= $form->field($model, 'hogar')->textInput() ?>
 
+    <?php
+        if ($cruce == 'Si') {
+    ?>
+    <p><strong>¡Actualmentes estás buscando mascotas con quien cruzarte!</strong></p>
+    <?php
+        }else{
+    ?>
+    <p><strong>¡Actualmentes no estás buscando mascotas con quien cruzarte!</strong></p>
+    <?php
+        }
+    ?>
+
+    <?= $form->field($model, 'cruce')->dropDownList(['' => '---', 'Si' => 'Si', 'No' => 'No']) ?>
+
     <?= $form->field($model, 'fecha_nacimiento')->textInput() ?>   
 
     <?= $form->field($model, 'descripcion')->textarea() ?>

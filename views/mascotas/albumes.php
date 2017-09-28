@@ -16,6 +16,21 @@ if ($id_amigo != '') {
 ?>
 
 <div class="div-center">
+	<?php
+		if ($cruce == 'Si') {	
+	?>
+	<ul class="nav nav-tabs">
+	  <li><?= Html::a('Perfil', ['mascotas/verperfil', 'id_amigo' => $id_amigo, 'cruce' => $cruce]) ?></li>
+	  <li><?= Html::a('Muro', ['mascotas/vermuro', 'id_amigo' => $id_amigo, 'cruce' => $cruce]) ?></li>
+	  <li><?= Html::a('Imágenes', ['mascotas/imagenes', 'id_amigo' => $id_amigo, 'cruce' => $cruce]) ?></li>
+	  <li class="active"><?= Html::a('Álbumes', ['mascotas/albumes', 'id_amigo' => $id_amigo, 'cruce' => $cruce]) ?></li>
+	  <li><?= Html::a('Dueño', ['mascotas/verdueno', 'id_amigo' => $id_amigo, 'cruce' => $cruce]) ?></li>
+	  <li><?= Html::a('Enviar mensaje', ['mascotas/enviarmsjcruce', 'id_amigo' => $id_amigo, 'cruce' => $cruce]) ?></li>
+	</ul>
+	<?php
+		}else{
+	?>
+
 	<ul class="nav nav-tabs">
 	  <li><?= Html::a('Perfil', ['mascotas/verperfil', 'id_amigo' => $id_amigo]) ?></li>
 	  <li><?= Html::a('Muro', ['mascotas/vermuro', 'id_amigo' => $id_amigo]) ?></li>
@@ -23,6 +38,10 @@ if ($id_amigo != '') {
 	  <li class="active"><?= Html::a('Álbumes', ['mascotas/albumes', 'id_amigo' => $id_amigo]) ?></li>
 	  <li><?= Html::a('Dueño', ['mascotas/verdueno', 'id_amigo' => $id_amigo]) ?></li>
 	</ul>
+
+	<?php
+		}
+	?>
 </div>
 
 <?php
@@ -98,7 +117,7 @@ if ($id_amigo != '') {
 					}else{
 					?>
 					<div class="col-lg-12">
-						<div class="col-lg-12 col-md-12"><?= Html::a('Acceder', ['mascotas/accederalbum','id_album' => $row->id,'id_amigo' => $id_amigo],['class' => 'btn btn-default']) ?></div>
+						<div class="col-lg-12 col-md-12"><?= Html::a('Acceder', ['mascotas/accederalbum','id_album' => $row->id,'id_amigo' => $id_amigo, 'cruce' => $cruce],['class' => 'btn btn-default']) ?></div>
 					</div>
 					<?php
 					}
@@ -152,7 +171,7 @@ if ($id_amigo != '') {
 					}else{
 					?>
 					<div class="col-lg-12">
-						<div class="col-lg-12 col-md-12"><?= Html::a('Acceder', ['mascotas/accederalbum','id_album' => $row->id,'id_amigo' => $id_amigo],['class' => 'btn btn-default']) ?></div>
+						<div class="col-lg-12 col-md-12"><?= Html::a('Acceder', ['mascotas/accederalbum','id_album' => $row->id,'id_amigo' => $id_amigo, 'cruce' => $cruce],['class' => 'btn btn-default']) ?></div>
 					</div>
 					<?php
 					}
@@ -205,7 +224,7 @@ if ($id_amigo != '') {
 					}else{
 					?>
 					<div class="col-lg-12">
-						<div class="col-lg-12 col-md-12"><?= Html::a('Acceder', ['mascotas/accederalbum','id_album' => $row->id,'id_amigo' => $id_amigo],['class' => 'btn btn-default']) ?></div>
+						<div class="col-lg-12 col-md-12"><?= Html::a('Acceder', ['mascotas/accederalbum','id_album' => $row->id,'id_amigo' => $id_amigo, 'cruce' => $cruce],['class' => 'btn btn-default']) ?></div>
 					</div>
 					<?php
 					}

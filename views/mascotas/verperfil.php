@@ -13,7 +13,23 @@ use yii\helpers\Url;
 $this->title = 'Ver perfil';
 ?>
 
-<div class="div-center">
+<div class="div-center">	
+
+	<?php
+		if ($cruce == 'Si') {	
+	?>
+	<ul class="nav nav-tabs">
+	  <li class="active"><?= Html::a('Perfil', ['mascotas/verperfil', 'id_amigo' => $id_amigo, 'cruce' => $cruce]) ?></li>
+	  <li><?= Html::a('Muro', ['mascotas/vermuro', 'id_amigo' => $id_amigo, 'cruce' => $cruce]) ?></li>
+	  <li><?= Html::a('Imágenes', ['mascotas/imagenes', 'id_amigo' => $id_amigo, 'cruce' => $cruce]) ?></li>
+	  <li><?= Html::a('Álbumes', ['mascotas/albumes', 'id_amigo' => $id_amigo, 'cruce' => $cruce]) ?></li>
+	  <li><?= Html::a('Dueño', ['mascotas/verdueno', 'id_amigo' => $id_amigo, 'cruce' => $cruce]) ?></li>
+	  <li><?= Html::a('Enviar mensaje', ['mascotas/enviarmsjcruce', 'id_amigo' => $id_amigo, 'cruce' => $cruce]) ?></li>
+	</ul>
+	<?php
+		}else{
+	?>
+
 	<ul class="nav nav-tabs">
 	  <li class="active"><?= Html::a('Perfil', ['mascotas/verperfil', 'id_amigo' => $id_amigo]) ?></li>
 	  <li><?= Html::a('Muro', ['mascotas/vermuro', 'id_amigo' => $id_amigo]) ?></li>
@@ -21,6 +37,11 @@ $this->title = 'Ver perfil';
 	  <li><?= Html::a('Álbumes', ['mascotas/albumes', 'id_amigo' => $id_amigo]) ?></li>
 	  <li><?= Html::a('Dueño', ['mascotas/verdueno', 'id_amigo' => $id_amigo]) ?></li>
 	</ul>
+
+	<?php
+		}
+	?>
+
 </div>
 <div class="border-box div-center" style="padding: 15px">
 	<div class="row">

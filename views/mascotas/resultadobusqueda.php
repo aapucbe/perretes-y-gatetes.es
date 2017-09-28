@@ -35,11 +35,20 @@ $this->title = 'Mis mascotas';
                 ?>
                 <img src=<?= '"'.Yii::$app->params['urlBaseImg'].$row->foto_perfil.'"' ?> alt="foto perfil mascota" class="img-responsive" width="90px" height="90px">
                 <?php
-                    }
+                    }if ($cruce == 'No') {
                 ?>
                 <div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
                     <?= Html::a('Añadir', ['mascotas/enviarsolicitud','id_mascota' => $row->id],['class' => 'btn btn-default']) ?>                 
                 </div>
+                <?php
+                    }else if ($cruce == 'Si') {
+                ?>
+                <div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
+                    <?= Html::a('Ver', ['mascotas/verperfil','id_amigo' => $row->id, 'cruce' => $cruce],['class' => 'btn btn-default']) ?>                 
+                </div>
+                <?php
+                    }
+                ?>
             </div>
             <div class="col-lg-1"></div>
     <?php            
@@ -58,11 +67,20 @@ $this->title = 'Mis mascotas';
                 ?>
                 <img src=<?= '"'.Yii::$app->params['urlBaseImg'].$row->foto_perfil.'"' ?> alt="foto perfil mascota" class="img-responsive" width="90px" height="90px">
                 <?php
-                    }
-                ?>                
+                    }if ($cruce == 'No') {
+                ?>
                 <div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
                     <?= Html::a('Añadir', ['mascotas/enviarsolicitud','id_mascota' => $row->id],['class' => 'btn btn-default']) ?>                 
                 </div>
+                <?php
+                    }else if ($cruce == 'Si') {
+                ?>
+                <div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
+                    <?= Html::a('Ver', ['mascotas/verperfil','id_amigo' => $row->id, 'cruce' => $cruce],['class' => 'btn btn-default']) ?>                 
+                </div>
+                <?php
+                    }
+                ?>
             </div>
         </div>
     <?php
@@ -80,11 +98,20 @@ $this->title = 'Mis mascotas';
                 ?>
                 <img src=<?= '"'.Yii::$app->params['urlBaseImg'].$row->foto_perfil.'"' ?> alt="foto perfil mascota" class="img-responsive" width="90px" height="90px">
                 <?php
-                    }
-                ?>                
+                    }if ($cruce == 'No') {
+                ?>
                 <div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
                     <?= Html::a('Añadir', ['mascotas/enviarsolicitud','id_mascota' => $row->id],['class' => 'btn btn-default']) ?>                 
                 </div>
+                <?php
+                    }else if ($cruce == 'Si') {
+                ?>
+                <div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
+                    <?= Html::a('Ver', ['mascotas/verperfil','id_amigo' => $row->id, 'cruce' => $cruce],['class' => 'btn btn-default']) ?>                 
+                </div>
+                <?php
+                    }
+                ?>
             </div>
             <div class="col-lg-1"></div>
     <?php

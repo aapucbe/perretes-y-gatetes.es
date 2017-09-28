@@ -19,7 +19,8 @@ class PerfilmascotaForm extends Model
     public $email_usuario;
     public $nombre;
     public $raza;  
-    public $hogar;  
+    public $hogar;
+    public $cruce;  
     public $fecha_nacimiento;
     public $descripcion;
     public $foto_perfil;
@@ -35,7 +36,7 @@ class PerfilmascotaForm extends Model
             // email_usuario must be email
             ['email_usuario','email'],
             // Estos campos no necesitan verificacion
-            [['id','id_usuario','nombre','raza','hogar','descripcion','fecha_nacimiento'],'default'],
+            [['id','id_usuario','nombre','raza','hogar','cruce','descripcion','fecha_nacimiento'],'default'],
             // Validar fecha_nacimiento como dd/mm/yyyy
             ['fecha_nacimiento', 'match', 'pattern' => "/^(\d{1,2})-(\d{1,2})-(\d{4})$/", 'message' => 'Formato dd-mm-aaaa'],
             // la contraseña actual debe ser obligatoria
@@ -88,6 +89,7 @@ class PerfilmascotaForm extends Model
         return [
             'fecha_nacimiento' => 'Fecha de nacimiento (dd-mm-aaaa)',
             'hogar' => '¿Donde vives?',
+            'cruce' => '¿Estás buscando una mascota con quien cruzarte?',
         ];
     }
 
