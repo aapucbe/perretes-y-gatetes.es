@@ -23,6 +23,9 @@ use app\models\Mensajes;
 use app\models\Posts;
 use app\models\CrearpostForm;
 use app\models\BuscarcruceForm;
+use app\models\Adopciones;
+use app\models\Imagenesadopcion;
+use app\models\PonerenadopcionForm;
 use yii\web\UploadedFile;
 use yii\web\Session;
 use yii\data\Pagination;
@@ -1015,6 +1018,108 @@ class MascotasController extends Controller
         }
 
         return $this->render('enviarmsjcruce',['model' => $model, 'msg' => $msg, 'id_amigo' => $id_amigo, 'cruce' => $cruce]);
+    }
+
+    public function actionVerlistaadopciones(){
+
+        $id = $this->getId();        
+
+        # Creamos lo necesario para la paginación
+        $query = Adopciones::find()->where(['id_mascota' => $id]);
+        $countQuery = clone $query;
+        $pages = new Pagination([
+            'pageSize' => 9,
+            'totalCount' => $countQuery->count(),            
+        ]);
+        $adopciones = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        return $this->render('verlistaadopciones',['adopciones' => $adopciones, 'pages' => $pages]);
+
+    }
+
+    public function actionEliminaradopcion(){
+
+        $id_adopcion = $_POST['id_adopcion'];
+        $id = $this->getId();
+
+        # Obtenemos las imagenes de la adopción
+        $imagenes = Imagenesadopcion::find()->where(['id_adopcion' => $id_adopcion])->all();
+
+        # Eliminamos las imagenes de la adopcion de la BD
+        foreach ($imagenes as $row) {
+            $row->delete();
+        }
+
+        # Eliminamos la carpeta de la adopcion con sus adopciones
+        $carpeta = ''.Yii::$app->params['urlBaseImg'].'/mascotas/mascota-'.$id.'/adopciones/adopcion-'.$id_adopcion;
+        $this->eliminarCarpeta($carpeta);
+
+        # Eliminamos la adopcion de la BD
+        $adopcion = Adopciones::findOne($id_adopcion);
+        $adopcion->delete();
+
+        return $this->redirect(['mascotas/verlistaadopciones']);
+
+    }
+
+    public function actionPonerenadopcion(){
+
+        $model = new PonerenadopcionForm();
+        $adopciones = new Adopciones();
+        $msg = '';
+        $id = $this->getId();
+
+        # Inicializamos el formulario
+        $model->id_mascota = $id;
+
+        # Parametros recibidos por POST al actualizar el formulario
+        if($model->load(Yii::$app->request->post()))
+        {
+            # Guardamos los datos en la BD
+            $adopciones->id_mascota = $model->id_mascota;
+            $adopciones->nombre = $model->nombre;
+            $adopciones->animal = $model->animal;
+            $adopciones->raza = $model->raza;
+            $adopciones->sexo = $model->sexo;
+            $adopciones->edad = $model->edad;
+            $adopciones->provincia = $model->provincia;
+            $adopciones->poblacion = $model->poblacion;
+
+            # Cogemos lo primera imagen subida como imagen de portada de la mascota
+            $model->imagenes = UploadedFile::getInstances($model, 'imagenes');
+            $adopciones->imagen_portada = $model->imagenes[0];
+
+            $adopciones->save();
+
+            $msg = 'Mascota añadida con éxito en adopción';
+
+            # Creamos la carpeta donde se guardarán las imágenes de la mascota en adopción
+            $dir = Yii::$app->params['urlBaseImg'].'/mascotas/mascota-'.$id.'/adopciones/adopcion-'.$adopciones->id;
+            mkdir($dir, 0777, true);
+
+            foreach ($model->imagenes as $file) {
+                $file->saveAs($dir .'/'. $file->baseName . '.' . $file->extension);
+                $imagenes = new Imagenesadopcion();
+                $imagenes->id_adopcion = $adopciones->id;
+                $imagenes->nombre = $file->name;
+                $imagenes->save();
+            }
+
+            # Reiniciamos el formulario
+            $model->nombre = '';
+            $model->animal = '';
+            $model->raza = '';
+            $model->sexo = '';
+            $model->edad = '';
+            $model->provincia = '';
+            $model->poblacion = '';
+            $model->imagenes = '';
+
+        }
+
+        return $this->render('ponerenadopcion', ['model' => $model, 'msg' => $msg]);
     }
 
 }

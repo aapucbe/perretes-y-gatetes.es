@@ -10,8 +10,12 @@ use app\models\PerfilForm;
 use app\models\Usuarios;
 use app\models\Mascotas;
 use app\models\CrearmascotaForm;
+use app\models\BuscaradopcionForm;
+use app\models\Adopciones;
+use app\models\Imagenesadopcion;
 use yii\web\UploadedFile;
 use yii\web\Session;
+use yii\data\Pagination;
 
 class UsuariosController extends Controller
 {
@@ -206,6 +210,8 @@ class UsuariosController extends Controller
                     mkdir($dirAlbumes, 0777, true);
                     $dirPosts = $dir.'/posts';
                     mkdir($dirPosts, 0777, true);
+                    $dirAdopciones = $dir.'/adopciones';
+                    mkdir($dirAdopciones, 0777, true);
                     $msg = "La mascota ha sido insertada con exito";
 
                     # Reiniciamos el modelo de formulario
@@ -309,5 +315,91 @@ class UsuariosController extends Controller
         }
      
         rmdir($carpeta);
+    }
+
+    public function actionBuscaradopcion(){
+
+        $model = new BuscaradopcionForm();
+
+        # Parametros recibidos por POST mediante el formulario
+        if ($model->load(Yii::$app->request->post())) {
+
+            if ($model->validate()) {
+
+                $adopciones = new Adopciones();
+                $query = "SELECT * FROM adopciones WHERE id NOT LIKE ''";
+
+                # No es necesario comprobar péro lo haremos por precaución
+                if (!empty($model->animal)) {
+                    $query .= " AND animal LIKE '".$model->animal."'";
+                }
+                
+                if (!empty($model->raza)) {
+                    $query .= " AND raza LIKE '".$model->raza."'";
+                }
+
+                # No es necesario comprobar péro lo haremos por precaución
+                if (!empty($model->sexo)) {
+                    $query .= " AND sexo LIKE '".$model->sexo."'";
+                }
+
+                if (!empty($model->provincia)) {
+                    $query .= " AND provincia LIKE '".$model->provincia."'";
+                }
+
+                $adopciones = $adopciones->findBySql($query);
+                
+                $countQuery = clone $adopciones;
+                $pages = new Pagination([
+                    'pageSize' => 9,
+                    'totalCount' => $countQuery->count(),            
+                ]);
+                $adopciones = $adopciones->offset($pages->offset)
+                    ->limit($pages->limit)
+                    ->all();
+
+                # Creamos la array para meter los correos de los dueños de las mascotas
+                $arrayCorreos = array();
+
+                foreach ($adopciones as $row) {
+                    # Buscamos la mascota que lo ha puesto en adopcion
+                    $mascota = Mascotas::findOne($row->id_mascota);
+
+                    # Buscamos el dueño  para obtener su correo donde su puedan poner en contacto
+                    $usuario = Usuarios::findOne($mascota->id_usuario);
+
+                    # Añadimos el correo a la array de correos
+                    array_push($arrayCorreos, $usuario->email);
+                }
+
+                return $this->render('resultadobusquedaadopcion',['adopciones' => $adopciones, 'pages' => $pages, 'arrayCorreos' => $arrayCorreos]);
+
+            }
+        }
+
+        return $this->render('buscaradopcion',['model' => $model]);
+
+    }
+
+    public function actionVerperfiladopcion(){
+
+        $id_adopcion = $_GET['id_adopcion'];
+
+        # Obtenemos las imagenes de la adopción
+        $imagenes = Imagenesadopcion::find()->where(['id_adopcion' => $id_adopcion])->all();
+
+        # Obtenemos el id de la mascota que ha puesto la adopción
+        $adopcion = Adopciones::findOne($id_adopcion);
+
+        # Buscamos la mascota que lo ha puesto en adopcion
+        $mascota = Mascotas::findOne($adopcion->id_mascota);
+
+        # Buscamos el dueño  para obtener su correo donde su puedan poner en contacto
+        $usuario = Usuarios::findOne($mascota->id_usuario);
+
+        $correo = $usuario->email;
+
+        return $this->render('verperfiladopcion',['imagenes' => $imagenes, 'id_adopcion' => $id_adopcion, 'adopcion' => $adopcion,'correo' => $correo]);
+
     }
 }
