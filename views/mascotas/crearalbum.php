@@ -30,6 +30,8 @@ $this->title = 'Crear Álbum';
 
 		<?= $form->field($model, "nombre")->textInput() ?>
 
+		<?= $form->field($model, 'imagen')->fileInput() ?>
+
 		<?= Html::submitButton('Crear álbum', ['class' => 'btn btn-primary', 'name' => 'album-button']) ?>	    
 	    
 	    <?php ActiveForm::end(); ?>

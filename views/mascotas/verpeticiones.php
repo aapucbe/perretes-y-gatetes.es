@@ -17,7 +17,9 @@ $this->title = 'Mis peticiones';
     </ul>
 </div>
 <div class="site-perfil border-box div-center" style="text-align: left">
-
+        <div class="row">
+            <h3><?= $msg ?></h3>
+        </div>
     <?php
         $i=1; 
         foreach($mascotas as $row):

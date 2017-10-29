@@ -11,6 +11,13 @@ use yii\widgets\LinkPager;
 use yii\helpers\Url;
 
 $this->title = 'Mis álbumes';
+
+if($_GET['mascota_id'] != ''){
+	$mascota_id = $_GET['mascota_id'];
+}else{
+	$mascota_id = $id_mascota;
+}
+
 if ($id_amigo != '') {
 
 ?>
@@ -80,7 +87,7 @@ if ($id_amigo != '') {
 				<p><strong><em><?= $row->nombre ?></em></strong></p>
 			</div>
 				<div class="row">
-					<img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].$row->imagen_destacada.'"' ?>>
+					<img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$mascota_id.'/albumes/album-'.$row->id.'/imagen_destacada.jpg"' ?>>
 				</div>			
 				<div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
 					<?php
@@ -134,7 +141,7 @@ if ($id_amigo != '') {
 				<p><strong><em><?= $row->nombre ?></em></strong></p>
 			</div>
 				<div class="row">
-					<img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].$row->imagen_destacada.'"' ?>>
+					<img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$mascota_id.'/albumes/album-'.$row->id.'/imagen_destacada.jpg"' ?>>
 				</div>			
 				<div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
 		            <?php
@@ -187,7 +194,7 @@ if ($id_amigo != '') {
 				<p><strong><em><?= $row->nombre ?></em></strong></p>
 			</div>
 				<div class="row">
-					<img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].$row->imagen_destacada.'"' ?>>
+					<img class="img-thumbnail" src=<?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$mascota_id.'/albumes/album-'.$row->id.'/imagen_destacada.jpg"' ?>>
 				</div>			
 				<div class="row" style="margin-bottom: 1em; margin-top: 0.6em">
 					<?php

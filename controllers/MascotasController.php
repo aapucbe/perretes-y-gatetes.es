@@ -269,6 +269,7 @@ class MascotasController extends Controller
     public function actionAlbumes(){
 
         $id_amigos = '';
+        $id_mascota = $this->getId();
 
         # Comprobamos si se esta accediendo desde la vvista de buscar cruce
         $cruce = '';
@@ -295,7 +296,7 @@ class MascotasController extends Controller
             ->limit($pages->limit)
             ->all();
 
-        return $this->render('albumes',['pages' => $pages, 'albumes' => $albumes,'id_amigo' => $id_amigo, 'cruce' => $cruce]);
+        return $this->render('albumes',['pages' => $pages, 'albumes' => $albumes,'id_amigo' => $id_amigo, 'cruce' => $cruce, 'id_mascota' => $id_mascota]);
     }
 
     public function actionCrearalbum(){
@@ -312,18 +313,26 @@ class MascotasController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
                 $album = new Albumes();
-                $album->id_mascota = $model->id_mascota;
-                $album->nombre = $model->nombre;
-                $album->imagen_destacada = 'imagen_destacada.jpg';
-                $album->save();
 
-                /**
-                 * Creacion de las carpetas necesarias para los albumes
-                 */
-                $dir = Yii::$app->params['urlBaseImg'].'/mascotas/mascota-'.$mascota_id.'/albumes/album-'.$album->id;
-                mkdir($dir, 0777, true);
+                if ($model->imagen = UploadedFile::getInstance($model, 'imagen')) {
+                    $album->id_mascota = $model->id_mascota;
+                    $album->nombre = $model->nombre;
+                    $album->save();
 
-                $this->redirect(["mascotas/albumes"]);
+                    /**
+                     * Creacion de las carpetas necesarias para los albumes
+                     */
+                    $dir = Yii::$app->params['urlBaseImg'].'/mascotas/mascota-'.$mascota_id.'/albumes/album-'.$album->id;
+                    mkdir($dir, 0777, true);
+
+                    $model->imagen->saveAs(Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$mascota_id.'/albumes/album-'.$album->id.'/imagen_destacada.jpg');
+                    $album->imagen_destacada = 'imagen_destacada.jpg';
+                    $album->save();
+                }
+
+                
+
+                $this->redirect(["mascotas/albumes", 'mascota_id' => $mascota_id]);
             }
         }
 
@@ -502,6 +511,7 @@ class MascotasController extends Controller
     public function actionVeramigos(){
 
         $id = $this->getId();
+        $msg = '';
 
         $amigos = new Mascotas();
         $query = "SELECT * FROM mascotas M, amigos A WHERE A.id_mascota = '". $id."' AND M.id = A.id_amigo";
@@ -516,11 +526,16 @@ class MascotasController extends Controller
             ->limit($pages->limit)
             ->all();
 
-        return $this->render('veramigos',['amigos' => $amigos, 'pages' => $pages]);
+        if (count($amigos) == 0) {
+            $msg = 'Aún no tienes ningún amigo';
+        }
+
+        return $this->render('veramigos',['amigos' => $amigos, 'pages' => $pages, 'msg' => $msg]);
     }
 
     public function actionVerpeticiones(){
         $id = $this->getId();
+        $msg = '';
 
         $mascotas = new Mascotas();
         $query = "SELECT * FROM mascotas M, peticiones P WHERE P.id_solicitado = '". $id."' AND M.id = P.id_solicitante";
@@ -535,7 +550,11 @@ class MascotasController extends Controller
             ->limit($pages->limit)
             ->all();
 
-        return $this->render('verpeticiones',['mascotas' => $mascotas, 'pages' => $pages]);
+        if (count($mascotas) == 0) {
+            $msg = 'No tienes ninguna petición de amistad';
+        }
+
+        return $this->render('verpeticiones',['mascotas' => $mascotas, 'pages' => $pages, 'msg' => $msg]);
     }
 
     public function actionEliminaramigo(){
@@ -724,7 +743,7 @@ class MascotasController extends Controller
         $mensaje->delete();
 
         # Redirigimos a la vista de mensajes de entrada sin el mensaje
-        $this->redirect(['mascotas/vermsjentrada']);
+        $this->redirect(['mascotas/vermsjenviados']);
     }
 
     public function actionVermsjunico(){
@@ -1023,6 +1042,7 @@ class MascotasController extends Controller
     public function actionVerlistaadopciones(){
 
         $id = $this->getId();        
+        $msg = '';
 
         # Creamos lo necesario para la paginación
         $query = Adopciones::find()->where(['id_mascota' => $id]);
@@ -1035,7 +1055,11 @@ class MascotasController extends Controller
             ->limit($pages->limit)
             ->all();
 
-        return $this->render('verlistaadopciones',['adopciones' => $adopciones, 'pages' => $pages]);
+        if (count($adopciones) == 0) {
+            $msg = 'Aún no has puesto ningún animal en adopción';
+        }
+
+        return $this->render('verlistaadopciones',['adopciones' => $adopciones, 'pages' => $pages, 'msg' => $msg]);
 
     }
 

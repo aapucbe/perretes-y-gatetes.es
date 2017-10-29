@@ -22,6 +22,7 @@ $this->title = 'Mensajes recibidos';
 </div>
 <div class="border-box div-center" style="padding: 15px">
 
+  <div class="table-responsive">
 	<!-- Vista de los mensajes y botones eliminar -->
 	<table class="table">
   		<tbody>
@@ -93,6 +94,7 @@ $this->title = 'Mensajes recibidos';
 
   		</tbody>
 	</table>
+  <div>
 
 	<div class="row">
 		<div class="col-lg-12">

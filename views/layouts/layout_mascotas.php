@@ -3,11 +3,23 @@
 	use yii\helpers\Html;
 	use yii\web\Session;
 	use app\models\Mascotas;
+	use app\models\Peticiones;
+	use app\models\Mensajes;
 
 	$session = Yii::$app->session;
     $session->open();
 
     $mascota = Mascotas::findOne($session['id_mascota']);
+    $nombre = $mascota->nombre;
+
+    # Comprobamos si la mascota tiene peticiones nuevas
+    $peticiones = Peticiones::find()->where(['id_solicitado' => $session['id_mascota']])->all();
+    $numPeticiones = count($peticiones);
+
+    # Comprobamos si la mascota tiene mensajes nuevos
+    $mensajes = Mensajes::find()->where(['id_receptor' => $session['id_mascota'], 'estado' => 'no leido'])->all();
+    $numMensajes = count($mensajes);
+
 ?>
 	<div class="container">
 		<div class="jumbotron hidden-xs">
@@ -28,21 +40,43 @@
 				<?php
 				if ($mascota->foto_perfil_mod == 1) {
 				?>
-				<div class="div-center">
-				<img class="img-perfil" src= <?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$mascota->id.'/'.$mascota->foto_perfil.'"' ?> width="104px" height="104px" alt=""></div>
+				<div class="div-center hidden-xs">
+				<img class="img-perfil" src= <?= '"'.Yii::$app->params['urlBaseImg'].'mascotas/mascota-'.$mascota->id.'/'.$mascota->foto_perfil.'"' ?> width="120px" height="120px" alt=""></div>
 				<?php				
 					}else{
 				?>
-				<div class="div-center">
-				<img class="img-perfil" src=<?= '"'.Yii::$app->params['urlBaseImg'].$mascota->foto_perfil.'"' ?> width="104px" height="104px" alt=""></div>
+				<div class="div-center hidden-xs">
+				<img class="img-perfil" src=<?= '"'.Yii::$app->params['urlBaseImg'].$mascota->foto_perfil.'"' ?> width="120px" height="120px" alt=""></div>
 				<?php
 					}
 				?>				
-				<div class="list-group sidebar hidden-xs">
-				  <?= Html::a('Mi Muro', ['mascotas/vermuro'],['class' => 'list-group-item']) ?>
+				<div class="list-group sidebar hidden-xs" style="margin-top:-1.4em">
+				  <?= Html::a($nombre, ['mascotas/vermuro'],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Mi Perfil', ['mascotas/perfil'],['class' => 'list-group-item']) ?>
+
+				<?php
+					if ($numPeticiones == 0) {
+				?>
 				  <?= Html::a('Mis Amigos', ['mascotas/veramigos'],['class' => 'list-group-item']) ?>
+				<?php
+					}else{
+				?>
+				  <?= Html::a('Mis Amigos <span class="aviso">'.$numPeticiones.'</span>', ['mascotas/veramigos'],['class' => 'list-group-item']) ?>
+				<?php
+				 	}
+				?>
+				<?php
+					if ($numMensajes == 0) {
+				?>
 				  <?= Html::a('Mis Mensajes', ['mascotas/vermsjentrada'],['class' => 'list-group-item']) ?>
+				<?php
+					}else{
+				?>
+				  <?= Html::a('Mis Mensajes <span class="aviso">'.$numMensajes.'</span>', ['mascotas/vermsjentrada'],['class' => 'list-group-item']) ?>
+				<?php
+				   }
+				?>
+
 				  <?= Html::a('Mis Imagenes', ['mascotas/imagenes'],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Buscar Mascotas', ['mascotas/buscarmascotas'],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Buscar Cruce', ['mascotas/buscarcruce'],['class' => 'list-group-item']) ?>

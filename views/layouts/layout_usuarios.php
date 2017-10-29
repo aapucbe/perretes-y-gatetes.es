@@ -21,17 +21,17 @@
 				<?php
 				if (Yii::$app->user->identity->foto_perfil_mod == 1) {
 				?>
-				<div class="div-center">
-				<img class="img-perfil" src= <?= '"'.Yii::$app->params['urlBaseImg'].'usuarios/usuario-'.Yii::$app->user->identity->id.'/'.Yii::$app->user->identity->foto_perfil.'"' ?> width="104px" height="104px" alt=""></div>
+				<div class="div-center hidden-xs">
+				<img class="img-perfil" src= <?= '"'.Yii::$app->params['urlBaseImg'].'usuarios/usuario-'.Yii::$app->user->identity->id.'/'.Yii::$app->user->identity->foto_perfil.'"' ?> width="120px" height="120px" alt=""></div>
 				<?php				
 					}else{
 				?>
-				<div class="div-center">
-				<img class="img-perfil" src=<?= '"'.Yii::$app->params['urlBaseImg'].Yii::$app->user->identity->foto_perfil.'"' ?> width="104px" height="104px" alt=""></div>
+				<div class="div-center hidden-xs">
+				<img class="img-perfil" src=<?= '"'.Yii::$app->params['urlBaseImg'].Yii::$app->user->identity->foto_perfil.'"' ?> width="120px" height="120px" alt=""></div>
 				<?php
 					}
 				?>				
-				<div class="list-group sidebar  hidden-xs">
+				<div class="list-group sidebar hidden-xs" style="margin-top:-1.4em">
 				  <?= Html::a('Mi Perfil', ['usuarios/perfil','id' => base64_encode(Yii::$app->user->identity->id)],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Mis Mascotas', ['usuarios/vermascotas'],['class' => 'list-group-item']) ?>
 				  <?= Html::a('Añadir Mascota', ['usuarios/crearmascota','id' => base64_encode(Yii::$app->user->identity->id)],['class' => 'list-group-item']) ?>

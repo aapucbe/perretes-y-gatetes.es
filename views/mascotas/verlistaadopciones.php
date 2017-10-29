@@ -21,6 +21,9 @@ $this->title = 'Ver lista en adopción';
 	</ul>
 </div>
 <div class="site-perfil border-box" style="text-align: left">
+	<div class="row" style="text-align:center;">
+		<h3><?= $msg ?></h3>
+	</div>
 
 	<?php
 		foreach ($adopciones as $row) {

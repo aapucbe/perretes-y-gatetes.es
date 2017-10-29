@@ -35,8 +35,12 @@ $this->title = 'Buscar en adopción';
     <?= $form->field($model, 'sexo')->radioList(['macho' => 'macho','hembra' => 'hembra']) ?>
 
     <?= $form->field($model, 'provincia')->textInput() ?>
-
-    <?= Html::submitButton('Buscar adopción', ['class' => 'btn btn-primary', 'name' => 'adopcion-button']) ?>	    
+    
+    <div class="form-group">
+        <div class="col-lg-offset-1 col-lg-11">
+            <?= Html::submitButton('Buscar adopción', ['class' => 'btn btn-primary', 'name' => 'adopcion-button']) ?>
+        </div>
+    </div>	    
 	    
 	<?php ActiveForm::end(); ?>
 
